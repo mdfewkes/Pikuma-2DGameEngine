@@ -14,6 +14,9 @@ public:
 	void Render();
 	void Run();
 
+	int windowWidth;
+	int windowHeight;
+
 private:
 	bool isRunning = false;
 	SDL_Window* window;
