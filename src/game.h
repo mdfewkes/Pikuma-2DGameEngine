@@ -1,17 +1,22 @@
 #pragma once
 
+#include <SDL2/SDL.h>
+
 class Game {
 public:
 	Game();
 	~Game();
 
 	void Initialize();
-	void Run();
+	void Destroy();
 	void ProcessInput();
 	void Update();
 	void Render();
-	void Destroy();
+	void Run();
 
 private:
+	bool isRunning = false;
+	SDL_Window* window;
+	SDL_Renderer* renderer;
 
 };
