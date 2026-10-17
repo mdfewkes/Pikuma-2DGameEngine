@@ -22,8 +22,8 @@ void Game::Initialize() {
 
 	SDL_DisplayMode displayMode;
 	SDL_GetCurrentDisplayMode(0, &displayMode);
-	windowWidth = displayMode.w;
-	windowHeight = displayMode.h;
+	windowWidth = 800;//displayMode.w;
+	windowHeight = 600;//displayMode.h;
 	window = SDL_CreateWindow(
 		NULL, 
 		SDL_WINDOWPOS_CENTERED, 
@@ -34,6 +34,7 @@ void Game::Initialize() {
 	if (!window) {
 		std::cerr << "Error creating SDL window." << std::endl;
 	}
+	SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN);
 
 	renderer = SDL_CreateRenderer(window, 0, 0);
 	if (!renderer) {
