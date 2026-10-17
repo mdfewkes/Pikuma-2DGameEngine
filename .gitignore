@@ -48,3 +48,5 @@ Icon
 *.dSYM/
 *.idb
 *.pdb
+.clangd
+main
