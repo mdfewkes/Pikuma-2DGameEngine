@@ -1,6 +1,6 @@
 CXX := g++
 
-CXXFLAGS += -std=c++17 -Ilibs/SDL/include -Ilibs/GLM/include -Ilibs/Lua/include -Ilibs/Sol/include -Ilibs/ImGui
+CXXFLAGS += -std=c++17 -Isrc -Ilibs/SDL/include -Ilibs/GLM/include -Ilibs/Lua/include -Ilibs/Sol/include -Ilibs/ImGui
 LDFLAGS += -Llibs/SDL/lib -Wl,-rpath,@executable_path/libs/SDL/lib -Llibs/lua/lib
 LDLIBS += -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer -llua
 

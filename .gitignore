@@ -54,3 +54,4 @@ Icon
 .clangd
 gameengine
 libs
+compile_flags.txt
