@@ -12,7 +12,7 @@ DEPS := libs/SDL/include/SDL2/SDL.h \
         libs/imgui/imgui.h
 
 build: main.cpp
-	$(CXX) $(CXXFLAGS) main.cpp $(LDFLAGS) $(LDLIBS) -o gameengine
+	$(CXX) $(CXXFLAGS) main.cpp src/*.cpp $(LDFLAGS) $(LDLIBS) -o gameengine
 
 run:
 	./gameengine
