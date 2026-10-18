@@ -2,6 +2,7 @@
 #include "SDL2/SDL.h"
 #include "SDL2/SDL_events.h"
 #include "SDL2/SDL_keycode.h"
+#include "SDL2/SDL_rect.h"
 #include "SDL2/SDL_render.h"
 #include "SDL2/SDL_video.h"
 
@@ -67,17 +68,25 @@ void Game::ProcessInput() {
 
 }
 
+void Game::Setup() {	
+}
+
 void Game::Update() {
 }
 
 void Game::Render() {
-	SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+	SDL_SetRenderDrawColor(renderer, 21, 21, 21, 255);
 	SDL_RenderClear(renderer);
+
+	SDL_Rect player = {10, 10, 20, 20};
+	SDL_SetRenderDrawColor(renderer, 211, 211, 211, 255);
+	SDL_RenderFillRect(renderer, &player);
 
 	SDL_RenderPresent(renderer);
 }
 
 void Game::Run() {
+	Setup();
 	while(isRunning) {
 		ProcessInput();
 		Update();

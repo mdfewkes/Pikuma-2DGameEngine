@@ -10,6 +10,7 @@ public:
 	void Initialize();
 	void Destroy();
 	void ProcessInput();
+	void Setup();
 	void Update();
 	void Render();
 	void Run();
