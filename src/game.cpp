@@ -36,7 +36,7 @@ void Game::Initialize() {
 	}
 	SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN);
 
-	renderer = SDL_CreateRenderer(window, 0, 0);
+	renderer = SDL_CreateRenderer(window, 0, SDL_RENDERER_PRESENTVSYNC);
 	if (!renderer) {
 		std::cerr << "Error creating SDL renderer." << std::endl;
 	}
