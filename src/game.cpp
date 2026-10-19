@@ -65,16 +65,16 @@ void Game::ProcessInput() {
 
 }
 
-glm::vec2 player;
+glm::vec2 playerPosition;
+glm::vec2 playerVelocity;
 
 void Game::Setup() {
-	player.x = 10.0f;
-	player.y = 20.0f;
+	playerPosition = glm::vec2(10.0f, 20.0f);
+	playerVelocity = glm::vec2(1.0f, 0.5f);
 }
 
 void Game::Update() {
-	player.x += 1.0f;
-	player.y += 0.5f;
+	playerPosition += playerVelocity;
 
 }
 
@@ -85,7 +85,7 @@ void Game::Render() {
 	SDL_Surface* surface = IMG_Load("./assets/images/tank-tiger-right.png");
 	SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
 
-	SDL_Rect dstRect = {(int)player.x, (int)player.y, 32, 32};
+	SDL_Rect dstRect = {(int)playerPosition.x, (int)playerPosition.y, 32, 32};
 	SDL_RenderCopy(renderer,texture, NULL, &dstRect);
 
 	SDL_FreeSurface(surface);
