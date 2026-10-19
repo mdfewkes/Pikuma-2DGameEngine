@@ -1,6 +1,7 @@
 #include "game.h"
 #include "SDL2/SDL.h"
 #include "SDL2/SDL_image.h"
+#include <glm/glm.hpp>
 
 #include <iostream>
 
@@ -64,13 +65,16 @@ void Game::ProcessInput() {
 
 }
 
-void Game::Setup() {	
+glm::vec2 player;
+
+void Game::Setup() {
+	player.x = 10.0f;
+	player.y = 20.0f;
 }
 
-int playerX = 10.0;
-int playerY = 10.0;
-
 void Game::Update() {
+	player.x += 1.0f;
+	player.y += 0.5f;
 
 }
 
@@ -81,7 +85,7 @@ void Game::Render() {
 	SDL_Surface* surface = IMG_Load("./assets/images/tank-tiger-right.png");
 	SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
 
-	SDL_Rect dstRect = {playerX++, playerY++, 32, 32};
+	SDL_Rect dstRect = {(int)player.x, (int)player.y, 32, 32};
 	SDL_RenderCopy(renderer,texture, NULL, &dstRect);
 
 	SDL_FreeSurface(surface);
