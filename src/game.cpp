@@ -85,7 +85,11 @@ void Game::Render() {
 	SDL_Surface* surface = IMG_Load("./assets/images/tank-tiger-right.png");
 	SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
 
-	SDL_Rect dstRect = {(int)playerPosition.x, (int)playerPosition.y, 32, 32};
+	SDL_Rect dstRect = {
+		static_cast<int>(playerPosition.x), 
+		static_cast<int>(playerPosition.y), 
+		32, 
+		32};
 	SDL_RenderCopy(renderer,texture, NULL, &dstRect);
 
 	SDL_FreeSurface(surface);
