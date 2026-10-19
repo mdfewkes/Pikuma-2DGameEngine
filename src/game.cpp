@@ -67,7 +67,11 @@ void Game::ProcessInput() {
 void Game::Setup() {	
 }
 
+int playerX = 10.0;
+int playerY = 10.0;
+
 void Game::Update() {
+
 }
 
 void Game::Render() {
@@ -77,7 +81,7 @@ void Game::Render() {
 	SDL_Surface* surface = IMG_Load("./assets/images/tank-tiger-right.png");
 	SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
 
-	SDL_Rect dstRect = {100, 100, 32, 32};
+	SDL_Rect dstRect = {playerX++, playerY++, 32, 32};
 	SDL_RenderCopy(renderer,texture, NULL, &dstRect);
 
 	SDL_FreeSurface(surface);
