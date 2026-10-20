@@ -75,7 +75,10 @@ void Game::Setup() {
 }
 
 void Game::Update() {
-	while(!SDL_TICKS_PASSED(SDL_GetTicks(), millisecondsPreviousFrame + MILLISECONDS_PER_FRAME));
+	int timeToWait = MILLISECONDS_PER_FRAME - (SDL_GetTicks() - millisecondsPreviousFrame);
+	if (timeToWait > 0 && timeToWait <= MILLISECONDS_PER_FRAME) {
+		SDL_Delay(timeToWait);
+	}
 	millisecondsPreviousFrame = SDL_GetTicks();
 
 	playerPosition += playerVelocity;
