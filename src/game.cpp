@@ -1,7 +1,6 @@
 #include "game.h"
 #include "SDL2/SDL.h"
 #include "SDL2/SDL_image.h"
-#include "SDL2/SDL_timer.h"
 #include <glm/glm.hpp>
 
 #include <iostream>
@@ -71,17 +70,23 @@ glm::vec2 playerVelocity;
 
 void Game::Setup() {
 	playerPosition = glm::vec2(10.0f, 20.0f);
-	playerVelocity = glm::vec2(1.0f, 0.5f);
+	playerVelocity = glm::vec2(60.0f, 30.0f);
 }
 
 void Game::Update() {
+
 	int timeToWait = MILLISECONDS_PER_FRAME - (SDL_GetTicks() - millisecondsPreviousFrame);
 	if (timeToWait > 0 && timeToWait <= MILLISECONDS_PER_FRAME) {
 		SDL_Delay(timeToWait);
 	}
+
+	float deltaTime = (SDL_GetTicks() - millisecondsPreviousFrame) / 1000.0f;
 	millisecondsPreviousFrame = SDL_GetTicks();
 
-	playerPosition += playerVelocity;
+
+	playerPosition += playerVelocity * deltaTime;
+	if (playerPosition.x > windowWidth) playerPosition.x -= windowWidth;
+	if (playerPosition.y > windowHeight) playerPosition.y -= windowHeight;
 }
 
 void Game::Render() {
