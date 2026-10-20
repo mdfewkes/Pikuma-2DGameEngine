@@ -19,8 +19,16 @@ run:
 
 clean:
 	rm -f gameengine
-	rm -rf libs/SDL libs/glm libs/lua libs/sol libs/imgui
-	rm -rf libs/.*.tar.gz libs/.*-src
+
+mr:
+	make build
+	make run
+
+cmr:
+	make clean
+	make build
+	make run
+
 
 deps: $(DEPS)
 
@@ -119,4 +127,9 @@ libs/imgui/imgui/imgui.h:
 	tar -xzf libs/.imgui.tar.gz --strip-components=1 -C libs/imgui/imgui
 	rm -f libs/.imgui.tar.gz
 
-.PHONY: run clean deps
+clean-deps:
+	rm -f gameengine
+	rm -rf libs/SDL libs/glm libs/lua libs/sol libs/imgui
+	rm -rf libs/.*.tar.gz libs/.*-src
+
+.PHONY: run clean mr cmr deps clean-deps
