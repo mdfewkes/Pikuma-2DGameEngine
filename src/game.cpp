@@ -34,7 +34,7 @@ void Game::Initialize() {
 	}
 	SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN);
 
-	renderer = SDL_CreateRenderer(window, 0, 0);
+	renderer = SDL_CreateRenderer(window, 0, SDL_RENDERER_PRESENTVSYNC);
 	if (!renderer) {
 		std::cerr << "Error creating SDL renderer." << std::endl;
 	}
@@ -74,11 +74,11 @@ void Game::Setup() {
 }
 
 void Game::Update() {
-
-	int timeToWait = MILLISECONDS_PER_FRAME - (SDL_GetTicks() - millisecondsPreviousFrame);
-	if (timeToWait > 0 && timeToWait <= MILLISECONDS_PER_FRAME) {
-		SDL_Delay(timeToWait);
-	}
+	// // Adhear to framerate
+	// int timeToWait = MILLISECONDS_PER_FRAME - (SDL_GetTicks() - millisecondsPreviousFrame);
+	// if (timeToWait > 0 && timeToWait <= MILLISECONDS_PER_FRAME) {
+	// 	SDL_Delay(timeToWait);
+	// }
 
 	float deltaTime = (SDL_GetTicks() - millisecondsPreviousFrame) / 1000.0f;
 	millisecondsPreviousFrame = SDL_GetTicks();
