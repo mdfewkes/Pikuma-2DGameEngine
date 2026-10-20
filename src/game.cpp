@@ -1,6 +1,7 @@
 #include "game.h"
 #include "SDL2/SDL.h"
 #include "SDL2/SDL_image.h"
+#include "SDL2/SDL_timer.h"
 #include <glm/glm.hpp>
 
 #include <iostream>
@@ -34,7 +35,7 @@ void Game::Initialize() {
 	}
 	SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN);
 
-	renderer = SDL_CreateRenderer(window, 0, SDL_RENDERER_PRESENTVSYNC);
+	renderer = SDL_CreateRenderer(window, 0, 0);
 	if (!renderer) {
 		std::cerr << "Error creating SDL renderer." << std::endl;
 	}
@@ -74,8 +75,10 @@ void Game::Setup() {
 }
 
 void Game::Update() {
-	playerPosition += playerVelocity;
+	while(!SDL_TICKS_PASSED(SDL_GetTicks(), millisecondsPreviousFrame + MILLISECONDS_PER_FRAME));
+	millisecondsPreviousFrame = SDL_GetTicks();
 
+	playerPosition += playerVelocity;
 }
 
 void Game::Render() {
@@ -89,7 +92,8 @@ void Game::Render() {
 		static_cast<int>(playerPosition.x), 
 		static_cast<int>(playerPosition.y), 
 		32, 
-		32};
+		32
+	};
 	SDL_RenderCopy(renderer,texture, NULL, &dstRect);
 
 	SDL_FreeSurface(surface);
