@@ -18,12 +18,19 @@ private:
 
 };
 
-class Component {
-public:
-	int GetId() const;
+struct IComponent {
+protected:
+	static int nextId;
 
-private:
-	int id;
+};
+
+template<typename TComponent>
+class Component : public IComponent {
+public:
+	static int GetId() {
+		static auto id = nextId++;
+		return id;
+	}
 	
 };
 
@@ -38,7 +45,7 @@ public:
 	void RemoveEntity(Entity entity);
 	std::vector<Entity> GetEntities() const;
 
-	template<typename T> void RequireComponent();
+	template<typename TComponent> void RequireComponent();
 
 private:
 	Signature componentSignature;
@@ -49,3 +56,13 @@ private:
 class Registry {
 	
 };
+
+
+
+
+
+template<typename TComponent>
+void System::RequireComponent() {
+	const auto componentId = Component<TComponent>::GetId();
+	componentSignature.set(componentId);
+}

@@ -21,16 +21,3 @@ void System::RemoveEntity(Entity entity) {
 std::vector<Entity> System::GetEntities() const {
 	return entities;
 }
-
-template<typename T>
-void System::RequireComponent() {
-	const auto componentId = Component<T>::GetId();
-	componentSignature.set(componentId);
-}
-
-
-
-
-int Component::GetId() const {
-	return id;
-}
