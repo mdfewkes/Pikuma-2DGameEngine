@@ -13,6 +13,10 @@ public:
 
 	int GetId() const;
 
+	bool operator== (const Entity other) {
+		return id == other.GetId();
+	}
+
 private:
 	int id;
 
