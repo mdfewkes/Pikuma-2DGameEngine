@@ -9,10 +9,12 @@ typedef std::bitset<MAX_COMPONENTS> Signature;
 class Entity {
 public:
 	Entity(int id);
+	Entity(const Entity& entity) = default;
 	~Entity() = default;
 
 	int GetId() const;
 
+	Entity& operator= (const Entity& other) = default;
 	bool operator== (const Entity other) {
 		return id == other.GetId();
 	}
