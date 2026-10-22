@@ -13,10 +13,12 @@ const Signature& System::GetSignature() const {
 }
 
 void System::AddEntity(Entity entity) {
-
+	entities.push_back(entity);
 }
 void System::RemoveEntity(Entity entity) {
-
+	entities.erase(std::find(entities.begin(), entities.end(), [&entity](Entity other){
+		return entity.GetId() == other.GetId();
+	}), entities.end());
 }
 std::vector<Entity> System::GetEntities() const {
 	return entities;
