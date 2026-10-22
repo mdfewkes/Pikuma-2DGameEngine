@@ -3,7 +3,10 @@
 #include "SDL2/SDL.h"
 #include "SDL2/SDL_image.h"
 #include <glm/glm.hpp>
+
 #include "logger.h"
+#include "ecs.h"
+#include "system_movement.h"
 
 Game::Game() {
 	isRunning = false;
@@ -66,12 +69,11 @@ void Game::ProcessInput() {
 
 }
 
-glm::vec2 playerPosition;
-glm::vec2 playerVelocity;
-
 void Game::Setup() {
-	playerPosition = glm::vec2(10.0f, 20.0f);
-	playerVelocity = glm::vec2(60.0f, 30.0f);
+	// Entity tank = registry.CreateEntity();
+	// tank.AddComponent<TransformComponent>();
+	// tank.AddComponent<BoxCollideromponent>();
+	// tank.AddComponent<SpriteComponent>("./assets/images/tank.png");
 }
 
 void Game::Update() {
@@ -84,10 +86,8 @@ void Game::Update() {
 	float deltaTime = (SDL_GetTicks() - millisecondsPreviousFrame) / 1000.0f;
 	millisecondsPreviousFrame = SDL_GetTicks();
 
-
-	playerPosition += playerVelocity * deltaTime;
-	if (playerPosition.x > windowWidth) playerPosition.x -= windowWidth;
-	if (playerPosition.y > windowHeight) playerPosition.y -= windowHeight;
+	// MovementSystem.Update();
+	// CollisionSystem.Update();
 }
 
 void Game::Render() {
