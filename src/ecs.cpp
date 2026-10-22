@@ -8,8 +8,8 @@ int Entity::GetId() const {
 
 
 
-Signature& System::GetSignature() const {
-	
+const Signature& System::GetSignature() const {
+	return componentSignature;
 }
 
 void System::AddEntity(Entity entity) {
@@ -19,5 +19,18 @@ void System::RemoveEntity(Entity entity) {
 
 }
 std::vector<Entity> System::GetEntities() const {
+	return entities;
+}
 
+template<typename T>
+void System::RequireComponent() {
+	const auto componentId = Component<T>::GetId();
+	componentSignature.set(componentId);
+}
+
+
+
+
+int Component::GetId() const {
+	return id;
 }

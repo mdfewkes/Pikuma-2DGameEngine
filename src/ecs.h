@@ -19,19 +19,26 @@ private:
 };
 
 class Component {
+public:
+	int GetId() const;
+
+private:
+	int id;
 	
 };
 
 class System {
 public:
 	System() = default;
-	~System() = default;
-	
-	Signature& GetSignature() const;
+	virtual ~System() = default;
+
+	const Signature& GetSignature() const;
 
 	void AddEntity(Entity entity);
 	void RemoveEntity(Entity entity);
 	std::vector<Entity> GetEntities() const;
+
+	template<typename T> void RequireComponent();
 
 private:
 	Signature componentSignature;
