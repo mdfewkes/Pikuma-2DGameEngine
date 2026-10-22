@@ -16,6 +16,9 @@ public:
 	bool operator== (const Entity other) {
 		return id == other.GetId();
 	}
+	bool operator!= (const Entity other) {
+		return id != other.GetId();
+	}
 
 private:
 	int id;
