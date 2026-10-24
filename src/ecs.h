@@ -63,8 +63,13 @@ private:
 	
 };
 
+class IPool {
+public:
+	virtual ~IPool() {}
+};
+
 template <typename T>
-class Pool {
+class Pool : public IPool {
 public:
 	Pool(int size = 100) { Resize(size); }
 	~Pool() = default;
@@ -81,13 +86,14 @@ public:
 
 private:
 	std::vector<T> data;
-}
+};
 
 class Registry {
 public:
 
 private:
 	int numEntities = 0;
+	std::vector<IPool*> componentPools;
 	
 };
 
