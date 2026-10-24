@@ -1,8 +1,12 @@
 #pragma once
 
-#include <__utility/pair.h>
+#include "logger.h"
+
 #include <bitset>
+#include <typeindex>
 #include <vector>
+#include <unordered_map>
+#include <set>
 
 const unsigned int MAX_COMPONENTS = 32;
 typedef std::bitset<MAX_COMPONENTS> Signature;
@@ -90,10 +94,33 @@ private:
 
 class Registry {
 public:
+	Registry() = default;
+
+	void Update();
+
+	Entity CreateEntity();
+	// void DistroyEntity(Entity entity);
+
+	// void AddComponent(Entity entity);
+	// void RemoveComponent(Entity entity);
+	// boolHasComponent(Entity entity);
+	// Component GetComponent(Entity entity);
+
+	// void AddSystem();
+	// void RemoveSystem();
+	// boolHasSystem();
+	// System GetSystem();
+
+	// void AddEntityToSystem(Entity entity);
+
 
 private:
 	int numEntities = 0;
 	std::vector<IPool*> componentPools;
+	std::vector<Signature> entityComponentSignatures;
+	std::unordered_map<std::type_index, System*> systems;
+	std::set<Entity> entitiesToBeAdded;
+	std::set<Entity> entitiesToBeRemoved;
 	
 };
 

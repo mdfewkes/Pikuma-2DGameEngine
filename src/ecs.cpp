@@ -1,4 +1,5 @@
 #include "ecs.h"
+#include "logger.h"
 #include <algorithm>
 
 Entity::Entity(int id) : id(id) {}
@@ -23,4 +24,23 @@ void System::RemoveEntity(Entity entity) {
 }
 std::vector<Entity> System::GetEntities() const {
 	return entities;
+}
+
+
+
+
+Entity Registry::CreateEntity() {
+	int entityId = numEntities++;
+	if (entityId >= entityComponentSignatures.size()) {
+		entityComponentSignatures.resize(entityId + 1);
+	}
+	Entity entity(entityId);
+	entitiesToBeAdded.insert(entity);
+
+	Logger::Log("Entity created with id = " + std::to_string(entityId));
+	return entity;
+}
+
+void Registry::Update() {
+	
 }
