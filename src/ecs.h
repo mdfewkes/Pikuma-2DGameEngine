@@ -4,6 +4,7 @@
 
 #include <bitset>
 #include <typeindex>
+#include <utility>
 #include <vector>
 #include <unordered_map>
 #include <set>
@@ -101,10 +102,10 @@ public:
 	Entity CreateEntity();
 	// void DistroyEntity(Entity entity);
 
-	// void AddComponent(Entity entity);
-	// void RemoveComponent(Entity entity);
-	// boolHasComponent(Entity entity);
-	// Component GetComponent(Entity entity);
+	template<typename TComponent, typename ...TArgs> void AddComponent(Entity entity, TArgs&& ...args);
+	// template<typename TComponent> void RemoveComponent(Entity entity);
+	// template<typename TComponent> boolHasComponent(Entity entity);
+	// template<typename TComponent> Component GetComponent(Entity entity);
 
 	// void AddSystem();
 	// void RemoveSystem();
@@ -132,4 +133,33 @@ template<typename TComponent>
 void System::RequireComponent() {
 	const auto componentId = Component<TComponent>::GetId();
 	componentSignature.set(componentId);
+}
+
+
+
+template<typename TComponent, typename ...TArgs> 
+void Registry::AddComponent(Entity entity, TArgs&& ...args) {
+	const auto componentId = Component<TComponent>::GetId();
+	const auto entityId = entity.GetId();
+
+	if (componentId >= componentPools.size()) {
+		componentPools.resize(componentId + 1, nullptr);
+	}
+
+	if (!componentPools[componentId]) {
+		Pool<TComponent>* newComponentPool = new Pool<TComponent>();
+		componentPools[componentId] = newComponentPool;
+	}
+
+	Pool<TComponent> componentPool = Pool<TComponent>(componentPools[componentId]);
+
+	if (entityId >= componentPool.GetSize()) {
+		componentPool->Resize(numEntities);
+	}
+
+	TComponent newComponent(std::forward<TArgs>(args)...);
+
+	componentPool->Set(entityId, newComponent);
+
+	entityComponentSignatures[entityId].set(componentId);
 }
