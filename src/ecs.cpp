@@ -2,6 +2,8 @@
 #include "logger.h"
 #include <algorithm>
 
+int IComponent::nextId = 0;
+
 Entity::Entity(int id) : id(id) {}
 
 int Entity::GetId() const {
