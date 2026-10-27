@@ -105,7 +105,7 @@ public:
 	template<typename TComponent, typename ...TArgs> void AddComponent(Entity entity, TArgs&& ...args);
 	template<typename TComponent> void RemoveComponent(Entity entity);
 	template<typename TComponent> bool HasComponent(Entity entity) const;
-	// template<typename TComponent> Component GetComponent(Entity entity);
+	template<typename TComponent> TComponent GetComponent(Entity entity);
 
 	// void AddSystem();
 	// void RemoveSystem();
@@ -178,4 +178,12 @@ bool Registry::HasComponent(Entity entity) const {
 	const auto entityId = entity.GetId();
 
 	return entityComponentSignatures[entityId].test(componentId);
+}
+
+template<typename TComponent> 
+TComponent Registry::GetComponent(Entity entity) {
+	const auto componentId = Component<TComponent>::GetId();
+	const auto entityId = entity.GetId();
+
+	return static_cast<TComponent>(componentPools[componentId][entityId]);
 }
