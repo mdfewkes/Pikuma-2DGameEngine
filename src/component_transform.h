@@ -1,6 +1,6 @@
 #pragma once
 
-#include <glm/glm.h>
+#include <glm/glm.hpp>
 
 #include "ecs.h"
 

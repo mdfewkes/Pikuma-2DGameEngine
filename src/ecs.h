@@ -1,7 +1,5 @@
 #pragma once
 
-#include "logger.h"
-
 #include <bitset>
 #include <memory>
 #include <typeindex>
@@ -27,6 +25,12 @@ public:
 	}
 	bool operator!= (const Entity other) {
 		return id != other.GetId();
+	}
+	bool operator< (const Entity& other) const {
+		return id < other.id;
+	}
+	bool operator> (const Entity& other) const {
+		return id > other.id;
 	}
 
 private:
@@ -77,18 +81,18 @@ public:
 template <typename T>
 class Pool : public IPool {
 public:
-	Pool(int size = 100) { Resize(size); }
-	~Pool() = default;
+	Pool(int size = 100) { data.resize(size); }
+	virtual ~Pool() = default;
 
-	bool IsEmpty() const { return data.empty(); }
+	bool isEmpty() const { return data.empty(); }
 	int GetSize() const { return data.size(); }
-	void Resize(int n) { data.Resize(); }
+	void Resize(int n) { data.resize(n); }
 	void Clear() { data.clear(); }
 	void Add(T object) { data.push_back(object); }
 	void Set(int index, T object) { data[index] = object; }
 	T& Get(int index) { return static_cast<T&>(data[index]); }
 
-	T& operator[] (unsigned int index) { return data[index]; }
+	T& operator [](unsigned int index) { return data[index]; }
 
 private:
 	std::vector<T> data;
@@ -113,8 +117,6 @@ public:
 	template<typename TSystem> bool HasSystem() const;
 	template<typename TSystem> TSystem& GetSystem();
 
-	void AddEntityToSystem(Entity entity);
-
 
 private:
 	int numEntities = 0;
@@ -123,6 +125,8 @@ private:
 	std::unordered_map<std::type_index, System*> systems;
 	std::set<Entity> entitiesToBeAdded;
 	std::set<Entity> entitiesToBeRemoved;
+
+	void AddEntityToSystem(Entity entity);
 	
 };
 
@@ -152,9 +156,9 @@ void Registry::AddComponent(Entity entity, TArgs&& ...args) {
 		componentPools[componentId] = newComponentPool;
 	}
 
-	Pool<TComponent> componentPool = Pool<TComponent>(componentPools[componentId]);
+	Pool<TComponent>* componentPool = componentPools[componentId];
 
-	if (entityId >= componentPool.GetSize()) {
+	if (entityId >= componentPool->GetSize()) {
 		componentPool->Resize(numEntities);
 	}
 

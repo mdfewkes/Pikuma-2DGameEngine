@@ -1,18 +1,21 @@
 #include "game.h"
 
-#include "SDL2/SDL.h"
-#include "SDL2/SDL_image.h"
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
 #include <glm/glm.hpp>
 
-#include "logger.h"
 #include "ecs.h"
-#include "system_movement.h"
+#include "logger.h"
+
+#include "component_transform.h"
 
 Game::Game() {
 	isRunning = false;
+	registry = new Registry();
 	Logger::Log("Game constructor called!");
 }
 Game::~Game() {
+	isRunning = false;
 	Logger::Log("Game destructor called!");
 }
 
@@ -70,10 +73,15 @@ void Game::ProcessInput() {
 }
 
 void Game::Setup() {
-	// Entity tank = registry.CreateEntity();
-	// tank.AddComponent<TransformComponent>();
-	// tank.AddComponent<BoxCollideromponent>();
-	// tank.AddComponent<SpriteComponent>("./assets/images/tank.png");
+	Entity tank = registry->CreateEntity();
+	// registry->AddComponent<TransformComponent>(tank);
+	// registry->AddComponent<BoxCollideromponent>(tank);
+	// registry->AddComponent<SpriteComponent>(tank, "./assets/images/tank.png");
+
+	Entity truck = registry->CreateEntity();
+	// registry->AddComponent<TransformComponent>(truck);
+	// registry->AddComponent<BoxCollideromponent>(truck);
+	// registry->AddComponent<SpriteComponent>(truck, "./assets/images/truck.png");
 }
 
 void Game::Update() {
@@ -94,19 +102,19 @@ void Game::Render() {
 	SDL_SetRenderDrawColor(renderer, 21, 21, 21, 255);
 	SDL_RenderClear(renderer);
 
-	SDL_Surface* surface = IMG_Load("./assets/images/tank-tiger-right.png");
-	SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
+	// SDL_Surface* surface = IMG_Load("./assets/images/tank-tiger-right.png");
+	// SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
 
-	SDL_Rect dstRect = {
-		static_cast<int>(playerPosition.x), 
-		static_cast<int>(playerPosition.y), 
-		32, 
-		32
-	};
-	SDL_RenderCopy(renderer,texture, NULL, &dstRect);
+	// SDL_Rect dstRect = {
+	// 	static_cast<int>(playerPosition.x), 
+	// 	static_cast<int>(playerPosition.y), 
+	// 	32, 
+	// 	32
+	// };
+	// SDL_RenderCopy(renderer,texture, NULL, &dstRect);
 
-	SDL_FreeSurface(surface);
-	SDL_DestroyTexture(texture);
+	// SDL_FreeSurface(surface);
+	// SDL_DestroyTexture(texture);
 
 	SDL_RenderPresent(renderer);
 }
