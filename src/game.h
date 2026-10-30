@@ -1,6 +1,7 @@
 #pragma once
 
 #include <SDL2/SDL.h>
+#include <memory>
 
 #include "ecs.h"
 
@@ -29,6 +30,6 @@ private:
 	SDL_Window* window;
 	SDL_Renderer* renderer;
 
-	Registry* registry;
+	std::unique_ptr<Registry> registry;
 
 };

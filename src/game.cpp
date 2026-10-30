@@ -3,6 +3,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <glm/glm.hpp>
+#include <memory>
 
 #include "ecs.h"
 #include "logger.h"
@@ -11,7 +12,7 @@
 
 Game::Game() {
 	isRunning = false;
-	registry = new Registry();
+	registry = std::make_unique<Registry>();
 	Logger::Log("Game constructor called!");
 }
 Game::~Game() {
