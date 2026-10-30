@@ -7,7 +7,7 @@
 #include "ecs.h"
 #include "logger.h"
 
-#include "component_transform.h"
+// #include "component_transform.h"
 
 Game::Game() {
 	isRunning = false;
