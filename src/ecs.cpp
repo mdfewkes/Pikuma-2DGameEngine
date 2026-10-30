@@ -1,5 +1,4 @@
 #include "ecs.h"
-#include "logger.h"
 #include <algorithm>
 
 int IComponent::nextId = 0;

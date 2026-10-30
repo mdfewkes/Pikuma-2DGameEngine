@@ -2,11 +2,14 @@
 
 #include <bitset>
 #include <memory>
+#include <string>
 #include <typeindex>
 #include <utility>
 #include <vector>
 #include <unordered_map>
 #include <set>
+
+#include "logger.h"
 
 const unsigned int MAX_COMPONENTS = 32;
 typedef std::bitset<MAX_COMPONENTS> Signature;
@@ -156,7 +159,7 @@ void Registry::AddComponent(Entity entity, TArgs&& ...args) {
 		componentPools[componentId] = newComponentPool;
 	}
 
-	std::shared_ptr<Pool<TComponent>> componentPool = std::static_pointer_cast<componentPools[componentId]>();
+	std::shared_ptr<Pool<TComponent>> componentPool = std::static_pointer_cast<Pool<TComponent>>(componentPools[componentId]);
 
 	if (entityId >= componentPool->GetSize()) {
 		componentPool->Resize(numEntities);
@@ -167,6 +170,8 @@ void Registry::AddComponent(Entity entity, TArgs&& ...args) {
 	componentPool->Set(entityId, newComponent);
 
 	entityComponentSignatures[entityId].set(componentId);
+
+	Logger::Log("Component id = " + std::to_string(componentId) + " was added to entity id " + std::to_string(entityId));
 }
 
 template<typename TComponent> 

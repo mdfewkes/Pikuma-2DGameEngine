@@ -7,8 +7,7 @@
 
 #include "ecs.h"
 #include "logger.h"
-
-// #include "component_transform.h"
+#include "components.hpp"
 
 Game::Game() {
 	isRunning = false;
@@ -75,12 +74,13 @@ void Game::ProcessInput() {
 
 void Game::Setup() {
 	Entity tank = registry->CreateEntity();
-	// registry->AddComponent<TransformComponent>(tank);
+	registry->AddComponent<TransformComponent>(tank, glm::vec2(10.0f, 30.0f), glm::vec2(1.0f, 1.0f), 0.0);
+	registry->AddComponent<RigidbobyComponent>(tank, glm::vec2(50.0f, 0.0f));
 	// registry->AddComponent<BoxCollideromponent>(tank);
 	// registry->AddComponent<SpriteComponent>(tank, "./assets/images/tank.png");
 
 	Entity truck = registry->CreateEntity();
-	// registry->AddComponent<TransformComponent>(truck);
+	registry->AddComponent<TransformComponent>(truck, glm::vec2(100.0f, 300.0f), glm::vec2(1.0f, 1.0f), 0.0);
 	// registry->AddComponent<BoxCollideromponent>(truck);
 	// registry->AddComponent<SpriteComponent>(truck, "./assets/images/truck.png");
 }
