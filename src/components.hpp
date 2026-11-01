@@ -1,6 +1,7 @@
 #pragma once
 
 #include <glm/glm.hpp>
+#include <string>
 
 struct TransformComponent {
 	glm::vec2 position;
@@ -23,9 +24,11 @@ struct RigidbobyComponent {
 };
 
 struct SpriteComponent {
+	std::string assetId;
 	int width, height;
 
-	SpriteComponent(int width = 0, int height = 0) {
+	SpriteComponent(std::string assetId = "", int width = 0, int height = 0) {
+		this->assetId = assetId;
 		this->width = width;
 		this->height = height;
 	}
