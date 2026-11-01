@@ -1,5 +1,6 @@
 #pragma once
 
+#include "SDL2/SDL_render.h"
 #include <glm/glm.hpp>
 #include <string>
 
@@ -24,12 +25,16 @@ struct RigidbobyComponent {
 };
 
 struct SpriteComponent {
-	std::string assetId;
+	SDL_Texture* texture;
 	int width, height;
 
-	SpriteComponent(std::string assetId = "", int width = 0, int height = 0) {
-		this->assetId = assetId;
+	SpriteComponent(SDL_Texture* texture = nullptr, int width = 0, int height = 0) {
+		this->texture = texture;
 		this->width = width;
 		this->height = height;
+
+		if (width == 0 && height == 0) {
+			SDL_QueryTexture(texture, NULL, NULL, &this->width, &this->height);
+		}
 	}
 };

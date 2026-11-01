@@ -77,19 +77,19 @@ void Game::Setup() {
 	registry->AddSystem<MovementSystem>();
 	registry->AddSystem<RenderSystem>();
 
-	assetStore->AddTexture(renderer, "tank-image", "./assets/images/tank.png");
+	assetStore->AddTexture(renderer, "tank-image", "./assets/images/tank-tiger-right.png");
 	assetStore->AddTexture(renderer, "truck-image", "./assets/images/truck-ford-right.png");
 
 	Entity tank = registry->CreateEntity();
 	tank.AddComponent<TransformComponent>(glm::vec2(10.0f, 30.0f));
 	tank.AddComponent<RigidbobyComponent>(glm::vec2(40.0f, 10.0f));
 	// tank.AddComponent<BoxCollideromponent>();
-	tank.AddComponent<SpriteComponent>("tank-image", 10, 10);
+	tank.AddComponent<SpriteComponent>(assetStore->GetTexture("tank-image"));
 
 	Entity truck = registry->CreateEntity();
 	truck.AddComponent<TransformComponent>(glm::vec2(100.0f, 300.0f));
 	// truck.AddComponent<BoxCollideromponent>();
-	truck.AddComponent<SpriteComponent>("truck-image", 10, 20);
+	truck.AddComponent<SpriteComponent>(assetStore->GetTexture("truck-image"));
 }
 
 void Game::Update() {

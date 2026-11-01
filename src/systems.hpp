@@ -2,7 +2,6 @@
 
 #include <SDL2/SDL.h>
 
-#include "SDL2/SDL_render.h"
 #include "ecs.h"
 #include "components.hpp"
 
@@ -41,14 +40,22 @@ public:
 			const auto transform = entity.GetComponent<TransformComponent>();
 			const auto sprite = entity.GetComponent<SpriteComponent>();
 
-			SDL_Rect objRect = {
-				static_cast<int>(transform.position.x), 
-				static_cast<int>(transform.position.y), 
-				sprite.width, 
-				sprite.height
+			SDL_Rect dstRect = {
+				static_cast<int>(transform.position.x),
+				static_cast<int>(transform.position.y),
+				static_cast<int>(sprite.width * transform.scale.x),
+				static_cast<int>(sprite.height * transform.scale.y)
 			};
-			SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-			SDL_RenderFillRect(renderer, &objRect);
+
+			SDL_RenderCopyEx(
+				renderer, 
+				sprite.texture, 
+				NULL, 
+				&dstRect, 
+				transform.rotation, 
+				NULL, 
+				SDL_FLIP_NONE
+			);
 		}
 	}
 };
