@@ -56,10 +56,16 @@ public:
 	
 };
 
-class System {
+class ISystem {
+public:
+	virtual ~ISystem() = default;
+	virtual void Update(double deltaTime) = 0;
+};
+
+class System : public ISystem {
 public:
 	System() = default;
-	virtual ~System() = default;
+	~System() override = default;
 
 	const Signature& GetSignature() const;
 
@@ -104,7 +110,7 @@ class Registry {
 public:
 	Registry() = default;
 
-	void Update();
+	void Update(double deltaTime);
 
 	Entity CreateEntity();
 	// void DistroyEntity(Entity entity);

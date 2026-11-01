@@ -8,6 +8,7 @@
 #include "ecs.h"
 #include "logger.h"
 #include "components.hpp"
+#include "systems.hpp"
 
 Game::Game() {
 	isRunning = false;
@@ -73,6 +74,8 @@ void Game::ProcessInput() {
 }
 
 void Game::Setup() {
+	registry->AddSystem<MovementSystem>();
+
 	Entity tank = registry->CreateEntity();
 	tank.AddComponent<TransformComponent>(glm::vec2(10.0f, 30.0f));
 	tank.AddComponent<RigidbobyComponent>(glm::vec2(10.0f, 30.0f));
@@ -95,8 +98,7 @@ void Game::Update() {
 	float deltaTime = (SDL_GetTicks() - millisecondsPreviousFrame) / 1000.0f;
 	millisecondsPreviousFrame = SDL_GetTicks();
 
-	// MovementSystem.Update();
-	// CollisionSystem.Update();
+	registry->Update(deltaTime);
 }
 
 void Game::Render() {

@@ -61,7 +61,11 @@ void Registry::AddEntityToSystem(Entity entity) {
 	}
 }
 
-void Registry::Update() {
+void Registry::Update(double deltaTime) {
+	for (auto& system: systems) {
+		system.second->Update(deltaTime);
+	}
+
 	for (auto entity: entitiesToBeAdded) {
 		AddEntityToSystem(entity);
 	}
@@ -70,4 +74,5 @@ void Registry::Update() {
 	// for (auto entity: entitiesToBeRemoved) {
 		
 	// }
+	// entitiesToBeRemoved.clear();
 }
