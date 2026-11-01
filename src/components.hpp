@@ -2,8 +2,6 @@
 
 #include <glm/glm.hpp>
 
-// #include "ecs.h"
-
 struct TransformComponent {
 	glm::vec2 position;
 	glm::vec2 scale;
@@ -21,5 +19,14 @@ struct RigidbobyComponent {
 
 	RigidbobyComponent(glm::vec2 velocity = glm::vec2(0,0)) {
 		this->velocity = velocity;
+	}
+};
+
+struct SpriteComponent {
+	int width, height;
+
+	SpriteComponent(int width = 0, int height = 0) {
+		this->width = width;
+		this->height = height;
 	}
 };

@@ -75,16 +75,19 @@ void Game::ProcessInput() {
 
 void Game::Setup() {
 	registry->AddSystem<MovementSystem>();
+	registry->AddSystem<RenderSystem>();
 
 	Entity tank = registry->CreateEntity();
 	tank.AddComponent<TransformComponent>(glm::vec2(10.0f, 30.0f));
-	tank.AddComponent<RigidbobyComponent>(glm::vec2(10.0f, 30.0f));
+	tank.AddComponent<RigidbobyComponent>(glm::vec2(40.0f, 10.0f));
 	// tank.AddComponent<BoxCollideromponent>();
+	tank.AddComponent<SpriteComponent>(10, 10);
 	// tank.AddComponent<SpriteComponent>("./assets/images/tank.png");
 
 	Entity truck = registry->CreateEntity();
 	truck.AddComponent<TransformComponent>(glm::vec2(100.0f, 300.0f));
 	// truck.AddComponent<BoxCollideromponent>();
+	truck.AddComponent<SpriteComponent>(10, 50);
 	// truck.AddComponent<SpriteComponent>("./assets/images/truck.png");
 }
 
@@ -105,19 +108,7 @@ void Game::Render() {
 	SDL_SetRenderDrawColor(renderer, 21, 21, 21, 255);
 	SDL_RenderClear(renderer);
 
-	// SDL_Surface* surface = IMG_Load("./assets/images/tank-tiger-right.png");
-	// SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
-
-	// SDL_Rect dstRect = {
-	// 	static_cast<int>(playerPosition.x), 
-	// 	static_cast<int>(playerPosition.y), 
-	// 	32, 
-	// 	32
-	// };
-	// SDL_RenderCopy(renderer,texture, NULL, &dstRect);
-
-	// SDL_FreeSurface(surface);
-	// SDL_DestroyTexture(texture);
+	registry->GetSystem<RenderSystem>().Render(renderer);
 
 	SDL_RenderPresent(renderer);
 }
