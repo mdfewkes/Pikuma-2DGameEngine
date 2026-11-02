@@ -2,7 +2,6 @@
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
-#include <cassert>
 #include <glm/glm.hpp>
 
 #include "logger.h"
@@ -11,8 +10,6 @@
 
 Game::Game() {
 	isRunning = false;
-	registry = std::make_unique<Registry>();
-	assetStore = std::make_unique<AssetStore>();
 	Logger::Log("Game constructor called!");
 }
 Game::~Game() {
@@ -74,22 +71,22 @@ void Game::ProcessInput() {
 }
 
 void Game::Setup() {
-	registry->AddSystem<MovementSystem>();
-	registry->AddSystem<RenderSystem>();
+	registry.AddSystem<MovementSystem>();
+	registry.AddSystem<RenderSystem>();
 
-	assetStore->AddTexture(renderer, "tank-image", "./assets/images/tank-tiger-right.png");
-	assetStore->AddTexture(renderer, "truck-image", "./assets/images/truck-ford-right.png");
+	assetStore.AddTexture(renderer, "tank-image", "./assets/images/tank-tiger-right.png");
+	assetStore.AddTexture(renderer, "truck-image", "./assets/images/truck-ford-right.png");
 
-	Entity tank = registry->CreateEntity();
+	Entity tank = registry.CreateEntity();
 	tank.AddComponent<TransformComponent>(glm::vec2(10.0f, 30.0f));
 	tank.AddComponent<RigidbobyComponent>(glm::vec2(40.0f, 10.0f));
 	// tank.AddComponent<BoxCollideromponent>();
-	tank.AddComponent<SpriteComponent>(assetStore->GetTexture("tank-image"));
+	tank.AddComponent<SpriteComponent>(assetStore.GetTexture("tank-image"));
 
-	Entity truck = registry->CreateEntity();
+	Entity truck = registry.CreateEntity();
 	truck.AddComponent<TransformComponent>(glm::vec2(100.0f, 300.0f));
 	// truck.AddComponent<BoxCollideromponent>();
-	truck.AddComponent<SpriteComponent>(assetStore->GetTexture("truck-image"));
+	truck.AddComponent<SpriteComponent>(assetStore.GetTexture("truck-image"));
 }
 
 void Game::Update() {
@@ -102,14 +99,14 @@ void Game::Update() {
 	float deltaTime = (SDL_GetTicks() - millisecondsPreviousFrame) / 1000.0f;
 	millisecondsPreviousFrame = SDL_GetTicks();
 
-	registry->Update(deltaTime);
+	registry.Update(deltaTime);
 }
 
 void Game::Render() {
 	SDL_SetRenderDrawColor(renderer, 21, 21, 21, 255);
 	SDL_RenderClear(renderer);
 
-	registry->GetSystem<RenderSystem>().Render(renderer);
+	registry.GetSystem<RenderSystem>().Render(renderer);
 
 	SDL_RenderPresent(renderer);
 }

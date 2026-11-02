@@ -31,7 +31,7 @@ private:
 	SDL_Window* window;
 	SDL_Renderer* renderer;
 
-	std::unique_ptr<Registry> registry;
-	std::unique_ptr<AssetStore> assetStore;
+	Registry registry;
+	AssetStore assetStore;
 
 };
