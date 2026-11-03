@@ -1,8 +1,8 @@
 #pragma once
 
+#include "SDL2/SDL_rect.h"
 #include "SDL2/SDL_render.h"
 #include <glm/glm.hpp>
-#include <string>
 
 struct TransformComponent {
 	glm::vec2 position;
@@ -27,8 +27,9 @@ struct RigidbobyComponent {
 struct SpriteComponent {
 	SDL_Texture* texture;
 	int width, height;
+	SDL_Rect srcRect;
 
-	SpriteComponent(SDL_Texture* texture = nullptr, int width = 0, int height = 0) {
+	SpriteComponent(SDL_Texture* texture = nullptr, int width = 0, int height = 0, int srcRectX = 0, int srcRectY = 0) {
 		this->texture = texture;
 		this->width = width;
 		this->height = height;
@@ -36,5 +37,7 @@ struct SpriteComponent {
 		if (width == 0 && height == 0) {
 			SDL_QueryTexture(texture, NULL, NULL, &this->width, &this->height);
 		}
+
+		this->srcRect = {srcRectX, srcRectY, this->width, this->height};
 	}
 };

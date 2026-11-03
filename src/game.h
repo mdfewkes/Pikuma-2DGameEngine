@@ -16,10 +16,6 @@ public:
 
 	void Initialize();
 	void Destroy();
-	void ProcessInput();
-	void Setup();
-	void Update();
-	void Render();
 	void Run();
 
 	int windowWidth;
@@ -34,4 +30,10 @@ private:
 	Registry registry;
 	AssetStore assetStore;
 
+	void ProcessInput();
+	void Setup();
+	void Update();
+	void Render();
+
+	void LoadLevel(int level);
 };

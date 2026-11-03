@@ -50,7 +50,7 @@ public:
 			SDL_RenderCopyEx(
 				renderer, 
 				sprite.texture, 
-				NULL, 
+				&sprite.srcRect, 
 				&dstRect, 
 				transform.rotation, 
 				NULL, 
