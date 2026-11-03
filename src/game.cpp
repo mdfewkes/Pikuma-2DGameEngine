@@ -81,8 +81,9 @@ void Game::LoadLevel(int level) {
 	double tileScale = 0.5;
 	int mapNumCols = 25;
 	int mapNumRows = 20;
+
 	std::fstream mapFile;
-	mapFile.open("./assets/tilemaps/jumgle.map");
+	mapFile.open("./assets/tilemaps/jungle.map");
 
 	for (int y = 0; y < mapNumRows; y++) {
 		for (int x = 0; x < mapNumCols; x++) {
@@ -93,11 +94,10 @@ void Game::LoadLevel(int level) {
 
 			mapFile.get(ch);
 			int srcRectX = std::atoi(&ch) * tileSize;
-
 			mapFile.ignore();
 
 			Entity tile = registry.CreateEntity();
-			tile.AddComponent<TransformComponent>(glm::vec2(x*(tileScale*tileSize), y*(tileScale*tileSize)), glm::vec2(tileScale, tileScale));
+			tile.AddComponent<TransformComponent>(glm::vec2(x * (tileScale * tileSize), y * (tileScale * tileSize)), glm::vec2(tileScale, tileScale));
 			tile.AddComponent<SpriteComponent>(assetStore.GetTexture("tilemap-image"), tileSize, tileSize, srcRectX, srcRectY);
 		}
 	}
