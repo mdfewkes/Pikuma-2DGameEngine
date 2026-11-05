@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <vector>
 
+#include "SDL2/SDL_timer.h"
 #include "ecs.h"
 #include "components.hpp"
 
@@ -74,6 +75,25 @@ public:
 				NULL, 
 				SDL_FLIP_NONE
 			);
+		}
+	}
+};
+
+class AnimationSystem : public System {
+public:
+	AnimationSystem() {
+		RequireComponent<SpriteComponent>();
+		RequireComponent<AnimationComponent>();
+	}
+	~AnimationSystem() override = default;
+
+	void Update(double deltaTime) override {
+		for (auto entity: GetEntities()) {
+			auto& sprite = entity.GetComponent<SpriteComponent>();
+			auto& animation = entity.GetComponent<AnimationComponent>();
+
+			animation.currentFrame = ((SDL_GetTicks() - animation.startTime) * animation.frameRate / 1000) % animation.numFrames;
+			sprite.srcRect.x = animation.currentFrame * sprite.width;
 		}
 	}
 };

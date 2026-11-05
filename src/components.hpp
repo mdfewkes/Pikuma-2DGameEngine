@@ -2,6 +2,7 @@
 
 #include "SDL2/SDL_rect.h"
 #include "SDL2/SDL_render.h"
+#include "SDL2/SDL_timer.h"
 #include <glm/glm.hpp>
 
 struct TransformComponent {
@@ -41,5 +42,21 @@ struct SpriteComponent {
 		}
 
 		this->srcRect = {srcRectX, srcRectY, this->width, this->height};
+	}
+};
+
+struct AnimationComponent {
+	int numFrames;
+	int currentFrame;
+	int frameRate;
+	bool looping;
+	int startTime;
+
+	AnimationComponent(int numFrames = 1, int frameRate = 1, bool looping = true) {
+		this->numFrames = numFrames;
+		this->currentFrame = 1;
+		this->frameRate = frameRate;
+		this->looping = looping;
+		this->startTime = SDL_GetTicks();
 	}
 };
