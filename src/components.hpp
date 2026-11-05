@@ -28,11 +28,13 @@ struct SpriteComponent {
 	SDL_Texture* texture;
 	int width, height;
 	SDL_Rect srcRect;
+	int zIndex = 0;
 
-	SpriteComponent(SDL_Texture* texture = nullptr, int width = 0, int height = 0, int srcRectX = 0, int srcRectY = 0) {
+	SpriteComponent(SDL_Texture* texture = nullptr, int zIndex = 0, int width = 0, int height = 0, int srcRectX = 0, int srcRectY = 0) {
 		this->texture = texture;
 		this->width = width;
 		this->height = height;
+		this->zIndex = zIndex;
 
 		if (width == 0 && height == 0) {
 			SDL_QueryTexture(texture, NULL, NULL, &this->width, &this->height);

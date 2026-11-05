@@ -1,6 +1,8 @@
 #pragma once
 
 #include <SDL2/SDL.h>
+#include <algorithm>
+#include <vector>
 
 #include "ecs.h"
 #include "components.hpp"
@@ -36,9 +38,25 @@ public:
 	void Update(double deltaTime) override {}
 
 	void Render(SDL_Renderer* renderer) {
+		struct RenderableEntity {
+			TransformComponent transformComponent;
+			SpriteComponent spriteComponent;
+		};
+		std::vector<RenderableEntity> renderableEntities;
 		for (auto entity: GetEntities()) {
-			const auto transform = entity.GetComponent<TransformComponent>();
-			const auto sprite = entity.GetComponent<SpriteComponent>();
+			RenderableEntity renderableEntity;
+			renderableEntity.transformComponent = entity.GetComponent<TransformComponent>();
+			renderableEntity.spriteComponent = entity.GetComponent<SpriteComponent>();
+
+			renderableEntities.push_back(renderableEntity);
+		}
+		std::sort(renderableEntities.begin(), renderableEntities.end(), [](const RenderableEntity entityA, const RenderableEntity entityB){
+			return entityA.spriteComponent.zIndex < entityB.spriteComponent.zIndex;
+		});
+
+		for (auto entity: renderableEntities) {
+			const auto transform = entity.transformComponent;
+			const auto sprite = entity.spriteComponent;
 
 			SDL_Rect dstRect = {
 				static_cast<int>(transform.position.x),

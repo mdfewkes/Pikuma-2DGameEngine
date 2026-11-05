@@ -98,7 +98,7 @@ void Game::LoadLevel(int level) {
 
 			Entity tile = registry.CreateEntity();
 			tile.AddComponent<TransformComponent>(glm::vec2(x * (tileScale * tileSize), y * (tileScale * tileSize)), glm::vec2(tileScale, tileScale));
-			tile.AddComponent<SpriteComponent>(assetStore.GetTexture("tilemap-image"), tileSize, tileSize, srcRectX, srcRectY);
+			tile.AddComponent<SpriteComponent>(assetStore.GetTexture("tilemap-image"), -1, tileSize, tileSize, srcRectX, srcRectY);
 		}
 	}
 	mapFile.close();
