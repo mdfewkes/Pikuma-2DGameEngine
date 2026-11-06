@@ -97,3 +97,16 @@ public:
 		}
 	}
 };
+
+class CollisionSystem : public System {
+public:
+	CollisionSystem() {
+		RequireComponent<BoxCollideComponent>();
+	}
+	~CollisionSystem() override = default;
+
+	void Update(double deltaTime) override {
+		
+	}
+};
+

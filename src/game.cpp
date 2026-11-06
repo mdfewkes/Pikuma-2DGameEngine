@@ -108,7 +108,7 @@ void Game::LoadLevel(int level) {
 	Entity chopper = registry.CreateEntity();
 	chopper.AddComponent<TransformComponent>(glm::vec2(10.0f, 10.0f));
 	chopper.AddComponent<RigidbobyComponent>(glm::vec2(0.0f, 0.0f));
-	// tank.AddComponent<BoxCollideromponent>();
+	chopper.AddComponent<BoxCollideComponent>();
 	chopper.AddComponent<SpriteComponent>(assetStore.GetTexture("chopper-image"), 1, 32, 32);
 	chopper.AddComponent<AnimationComponent>(2, 15);
 
@@ -116,12 +116,12 @@ void Game::LoadLevel(int level) {
 	Entity tank = registry.CreateEntity();
 	tank.AddComponent<TransformComponent>(glm::vec2(10.0f, 30.0f));
 	tank.AddComponent<RigidbobyComponent>(glm::vec2(40.0f, 10.0f));
-	// tank.AddComponent<BoxCollideromponent>();
+	tank.AddComponent<BoxCollideComponent>(32, 32);
 	tank.AddComponent<SpriteComponent>(assetStore.GetTexture("tank-image"));
 
 	Entity truck = registry.CreateEntity();
-	truck.AddComponent<TransformComponent>(glm::vec2(100.0f, 300.0f));
-	// truck.AddComponent<BoxCollideromponent>();
+	truck.AddComponent<TransformComponent>(glm::vec2(70.0f, 50.0f));
+	truck.AddComponent<BoxCollideComponent>(32, 32);
 	truck.AddComponent<SpriteComponent>(assetStore.GetTexture("truck-image"));
 
 	Entity radar = registry.CreateEntity();
@@ -135,6 +135,7 @@ void Game::Setup() {
 	registry.AddSystem<MovementSystem>();
 	registry.AddSystem<RenderSystem>();
 	registry.AddSystem<AnimationSystem>();
+	registry.AddSystem<CollisionSystem>();
 
 	LoadLevel(1);
 }

@@ -20,7 +20,7 @@ struct TransformComponent {
 struct RigidbobyComponent {
 	glm::vec2 velocity;
 
-	RigidbobyComponent(glm::vec2 velocity = glm::vec2(0,0)) {
+	RigidbobyComponent(glm::vec2 velocity = glm::vec2(0)) {
 		this->velocity = velocity;
 	}
 };
@@ -58,5 +58,16 @@ struct AnimationComponent {
 		this->frameRate = frameRate;
 		this->looping = looping;
 		this->startTime = SDL_GetTicks();
+	}
+};
+
+struct BoxCollideComponent {
+	int width, height;
+	glm::vec2 offset;
+
+	BoxCollideComponent(int width = 0, int height = 0, glm::vec2 offset = glm::vec2(0)) {
+		this->width = width;
+		this->height = height;
+		this->offset = offset;
 	}
 };
