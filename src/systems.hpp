@@ -106,7 +106,45 @@ public:
 	~CollisionSystem() override = default;
 
 	void Update(double deltaTime) override {
-		
+		auto entities = GetEntities();
+
+		for (auto entityAItt = entities.begin(); entityAItt != entities.end(); entityAItt++) {
+			Entity entityA = *entityAItt;
+			auto transformA = entityA.GetComponent<TransformComponent>();
+			auto colliderA = entityA.GetComponent<BoxCollideComponent>();
+
+			for (auto entityBItt = entityAItt; entityBItt != entities.end(); entityBItt++) {
+				Entity entityB = *entityBItt;
+				if (entityA == entityB) continue;
+
+				auto transformB = entityB.GetComponent<TransformComponent>();
+				auto colliderB = entityB.GetComponent<BoxCollideComponent>();
+
+				bool collisionHappened = CheckAABBCollision(
+					transformA.position.x + colliderA.offset.x,
+					transformA.position.y + colliderA.offset.y,
+					colliderA.width,
+					colliderA.height,
+					transformB.position.x + colliderB.offset.x,
+					transformB.position.y + colliderB.offset.y,
+					colliderB.width,
+					colliderB.height
+				);
+
+				if (collisionHappened) {
+					Logger::Log("bam");
+				}
+			}
+		}
+	}
+
+	bool CheckAABBCollision(double xA, double yA, double wA, double hA, double xB, double yB, double wB, double hB) {
+		return (
+			xA < xB + wB &&
+			xA + wA > xB &&
+			yA < yB + hB &&
+			yA + hA > yB
+		);
 	}
 };
 
