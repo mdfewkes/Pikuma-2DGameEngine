@@ -157,7 +157,7 @@ void Game::Render() {
 	SDL_SetRenderDrawColor(renderer, 21, 21, 21, 255);
 	SDL_RenderClear(renderer);
 
-	registry.GetSystem<RenderSystem>().Render(renderer);
+	registry.Render(renderer);
 
 	SDL_RenderPresent(renderer);
 }

@@ -10,6 +10,8 @@ int Entity::GetId() const {
 }
 
 
+void ISystem::Update(double) {}
+void ISystem::Render(SDL_Renderer*) {}
 
 const Signature& System::GetSignature() const {
 	return componentSignature;
@@ -75,4 +77,10 @@ void Registry::Update(double deltaTime) {
 		
 	// }
 	// entitiesToBeRemoved.clear();
+}
+
+void Registry::Render(SDL_Renderer* renderer) {
+	for (auto& system: systems) {
+		system.second->Render(renderer);
+	}
 }

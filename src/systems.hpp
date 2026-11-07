@@ -36,9 +36,7 @@ public:
 	}
 	~RenderSystem() override = default;
 
-	void Update(double deltaTime) override {}
-
-	void Render(SDL_Renderer* renderer) {
+	void Render(SDL_Renderer* renderer) override {
 		struct RenderableEntity {
 			TransformComponent transformComponent;
 			SpriteComponent spriteComponent;
@@ -145,6 +143,9 @@ public:
 			yA < yB + hB &&
 			yA + hA > yB
 		);
+	}
+
+	void Render(SDL_Renderer* renderer) override {
 	}
 };
 

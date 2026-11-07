@@ -9,6 +9,8 @@
 #include <unordered_map>
 #include <set>
 
+#include "SDL2/SDL_render.h"
+
 #include "logger.h"
 
 const unsigned int MAX_COMPONENTS = 32;
@@ -59,7 +61,8 @@ public:
 class ISystem {
 public:
 	virtual ~ISystem() = default;
-	virtual void Update(double deltaTime) = 0;
+	virtual void Update(double deltaTime);
+	virtual void Render(SDL_Renderer* renderer);
 };
 
 class System : public ISystem {
@@ -111,6 +114,7 @@ public:
 	Registry() = default;
 
 	void Update(double deltaTime);
+	void Render(SDL_Renderer* renderer);
 
 	Entity CreateEntity();
 	// void DistroyEntity(Entity entity);
