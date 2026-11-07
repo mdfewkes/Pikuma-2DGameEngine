@@ -4,6 +4,8 @@
 #include <algorithm>
 #include <vector>
 
+#include "SDL2/SDL_rect.h"
+#include "SDL2/SDL_render.h"
 #include "SDL2/SDL_timer.h"
 #include "ecs.h"
 #include "components.hpp"
@@ -144,8 +146,29 @@ public:
 			yA + hA > yB
 		);
 	}
-
-	void Render(SDL_Renderer* renderer) override {
-	}
 };
 
+class RenderCollisionSystem : public System {
+public:
+	RenderCollisionSystem() {
+		RequireComponent<TransformComponent>();
+		RequireComponent<BoxCollideComponent>();
+	}
+	~RenderCollisionSystem() override = default;
+
+	void Render(SDL_Renderer* renderer) override {
+		for (auto entity: GetEntities()) {
+			auto transform = entity.GetComponent<TransformComponent>();
+			auto collider = entity.GetComponent<BoxCollideComponent>();
+
+			SDL_Rect colliderRect = {
+				static_cast<int>(transform.position.x + collider.offset.x),
+				static_cast<int>(transform.position.y + collider.offset.y),
+				static_cast<int>(collider.width),
+				static_cast<int>(collider.height)
+			};
+			SDL_SetRenderDrawColor(renderer, 255, 0, 0, 200);
+			SDL_RenderDrawRect(renderer, &colliderRect);
+		}
+	}
+};

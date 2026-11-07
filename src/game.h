@@ -22,6 +22,7 @@ public:
 
 private:
 	bool isRunning = false;
+	bool isDebug = false;
 	int millisecondsPreviousFrame;
 	SDL_Window* window;
 	SDL_Renderer* renderer;

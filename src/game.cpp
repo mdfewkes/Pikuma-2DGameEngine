@@ -5,6 +5,7 @@
 #include <fstream>
 #include <glm/glm.hpp>
 
+#include "SDL2/SDL_keycode.h"
 #include "ecs.h"
 #include "logger.h"
 #include "components.hpp"
@@ -65,6 +66,14 @@ void Game::ProcessInput() {
 		case SDL_KEYDOWN:
 			if (sdlEvent.key.keysym.sym == SDLK_ESCAPE) {
 				isRunning = false;
+			}
+			if (sdlEvent.key.keysym.sym == SDLK_d) {
+				isDebug = !isDebug;
+				if (isDebug) {
+					registry.AddSystem<RenderCollisionSystem>();
+				} else {
+					registry.RemoveSystem<RenderCollisionSystem>();
+				}
 			}
 			break;
 		}
@@ -147,7 +156,7 @@ void Game::Update() {
 	// 	SDL_Delay(timeToWait);
 	// }
 
-	float deltaTime = (SDL_GetTicks() - millisecondsPreviousFrame) / 1000.0f;
+	float deltaTime = (SDL_GetTicks()  - millisecondsPreviousFrame) / 1000.0f;
 	millisecondsPreviousFrame = SDL_GetTicks();
 
 	registry.Update(deltaTime);
