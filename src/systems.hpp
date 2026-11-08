@@ -133,6 +133,9 @@ public:
 
 				if (collisionHappened) {
 					Logger::Log("bam");
+
+					entityA.Destroy();
+					entityB.Destroy();
 				}
 			}
 		}

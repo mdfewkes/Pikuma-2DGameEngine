@@ -67,14 +67,6 @@ void Game::ProcessInput() {
 			if (sdlEvent.key.keysym.sym == SDLK_ESCAPE) {
 				isRunning = false;
 			}
-			if (sdlEvent.key.keysym.sym == SDLK_d) {
-				isDebug = !isDebug;
-				if (isDebug) {
-					registry.AddSystem<RenderCollisionSystem>();
-				} else {
-					registry.RemoveSystem<RenderCollisionSystem>();
-				}
-			}
 			break;
 		}
 	}
@@ -145,6 +137,7 @@ void Game::Setup() {
 	registry.AddSystem<RenderSystem>();
 	registry.AddSystem<AnimationSystem>();
 	registry.AddSystem<CollisionSystem>();
+	registry.AddSystem<RenderCollisionSystem>();
 
 	LoadLevel(1);
 }

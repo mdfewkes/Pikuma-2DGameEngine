@@ -9,6 +9,10 @@ int Entity::GetId() const {
 	return id;
 }
 
+void Entity::Destroy() {
+	registry->DestroyEntity(*this);
+}
+
 
 void ISystem::Update(double) {}
 void ISystem::Render(SDL_Renderer*) {}
@@ -33,20 +37,26 @@ std::vector<Entity> System::GetEntities() const {
 
 
 Entity Registry::CreateEntity() {
-	int entityId = numEntities++;
-	if (entityId >= entityComponentSignatures.size()) {
-		entityComponentSignatures.resize(entityId + 1);
+	int entityId;
+	if (freeIds.empty()) {
+		entityId = numEntities++;
+		if (entityId >= entityComponentSignatures.size()) {
+			entityComponentSignatures.resize(entityId + 1);
+		}
+	} else {
+		entityId = freeIds.front();
+		freeIds.pop_front();
 	}
+
 	Entity entity(entityId);
 	entity.registry = this;
 	entitiesToBeAdded.insert(entity);
 
-	if (entityId >= entityComponentSignatures.size()) {
-		entityComponentSignatures.resize(entityId + 1);
-	}
-
 	Logger::Log("Entity created with id = " + std::to_string(entityId));
 	return entity;
+}
+void Registry::DestroyEntity(Entity entity) {
+	entitiesToBeRemoved.insert(entity);
 }
 
 void Registry::AddEntityToSystem(Entity entity) {
@@ -62,6 +72,17 @@ void Registry::AddEntityToSystem(Entity entity) {
 		}
 	}
 }
+void Registry::RemoveEntityFromSystem(Entity entity) {
+	const auto entityId = entity.GetId();
+
+	for (auto system: systems) {
+		system.second->RemoveEntity(entity);
+	}
+
+	entityComponentSignatures[entityId].reset();
+
+	freeIds.push_back(entityId);
+}
 
 void Registry::Update(double deltaTime) {
 	for (auto& system: systems) {
@@ -73,10 +94,10 @@ void Registry::Update(double deltaTime) {
 	}
 	entitiesToBeAdded.clear();
 
-	// for (auto entity: entitiesToBeRemoved) {
-		
-	// }
-	// entitiesToBeRemoved.clear();
+	for (auto entity: entitiesToBeRemoved) {
+		RemoveEntityFromSystem(entity);
+	}
+	entitiesToBeRemoved.clear();
 }
 
 void Registry::Render(SDL_Renderer* renderer) {

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <bitset>
+#include <deque>
 #include <memory>
 #include <string>
 #include <typeindex>
@@ -29,6 +30,8 @@ public:
 	bool operator!= (const Entity& other) const { return id != other.GetId(); }
 	bool operator> (const Entity& other) const { return id > other.id; }
 	bool operator< (const Entity& other) const { return id < other.id; }
+
+	void Destroy();
 
 	template<typename TComponent, typename ...TArgs> void AddComponent(TArgs&& ...args);
 	template<typename TComponent> void RemoveComponent();
@@ -117,7 +120,7 @@ public:
 	void Render(SDL_Renderer* renderer);
 
 	Entity CreateEntity();
-	// void DistroyEntity(Entity entity);
+	void DestroyEntity(Entity entity);
 
 	template<typename TComponent, typename ...TArgs> void AddComponent(Entity entity, TArgs&& ...args);
 	template<typename TComponent> void RemoveComponent(Entity entity);
@@ -137,8 +140,10 @@ private:
 	std::unordered_map<std::type_index, std::shared_ptr<System>> systems;
 	std::set<Entity> entitiesToBeAdded;
 	std::set<Entity> entitiesToBeRemoved;
+	std::deque<int> freeIds;
 
 	void AddEntityToSystem(Entity entity);
+	void RemoveEntityFromSystem(Entity entity);
 	
 };
 
