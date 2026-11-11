@@ -22,7 +22,7 @@ private:
 };
 
 template<typename TOwner, typename TEvent>
-class EventCallback : IEventCallback {
+class EventCallback : public IEventCallback {
 public:
 	typedef void (TOwner::*CallbackFunction)(TEvent&);
 
@@ -33,7 +33,7 @@ public:
 	~EventCallback() override = default;
 
 private:
-	TOwner ownerInstance;
+	TOwner* ownerInstance;
 	CallbackFunction callbackFunction;
 
 	void Call(Event e) override {
@@ -47,6 +47,10 @@ class EventBus {
 public:
 	EventBus() {}
 	~EventBus() {}
+
+	void Reset() {
+		subscribers.clear();
+	}
 
 	template<typename TEvent, typename TOwner>
 	void SubscribeToEvent(TOwner* ownerInstance, void (TOwner::*callbackFunction)(TEvent&)) {

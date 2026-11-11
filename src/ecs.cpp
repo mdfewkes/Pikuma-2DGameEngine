@@ -1,4 +1,5 @@
 #include "ecs.h"
+
 #include <algorithm>
 
 int IComponent::nextId = 0;
@@ -10,12 +11,11 @@ int Entity::GetId() const {
 }
 
 void Entity::Destroy() {
+	Logger::Log("  Destroy {");
 	registry->DestroyEntity(*this);
+	Logger::Log("  Destroy }");
 }
 
-
-void ISystem::Update(double) {}
-void ISystem::Render(SDL_Renderer*) {}
 
 const Signature& System::GetSignature() const {
 	return componentSignature;
@@ -57,6 +57,7 @@ Entity Registry::CreateEntity() {
 }
 void Registry::DestroyEntity(Entity entity) {
 	entitiesToBeRemoved.insert(entity);
+    Logger::Log("Entity " + std::to_string(entity.GetId()) + " was killed");
 }
 
 void Registry::AddEntityToSystem(Entity entity) {
@@ -84,9 +85,15 @@ void Registry::RemoveEntityFromSystem(Entity entity) {
 	freeIds.push_back(entityId);
 }
 
-void Registry::Update(double deltaTime) {
+void Registry::SubscribeToEvents(EventBus* eventBus) {
 	for (auto& system: systems) {
-		system.second->Update(deltaTime);
+		system.second->SubscribeToEvents(eventBus);
+	}
+}
+
+void Registry::Update(double deltaTime, EventBus* eventBus) {
+	for (auto& system: systems) {
+		system.second->Update(deltaTime, eventBus);
 	}
 
 	for (auto entity: entitiesToBeAdded) {

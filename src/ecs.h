@@ -12,6 +12,7 @@
 
 #include "SDL2/SDL_render.h"
 
+#include "eventbus.hpp"
 #include "logger.h"
 
 const unsigned int MAX_COMPONENTS = 32;
@@ -64,8 +65,9 @@ public:
 class ISystem {
 public:
 	virtual ~ISystem() = default;
-	virtual void Update(double deltaTime);
-	virtual void Render(SDL_Renderer* renderer);
+	virtual void SubscribeToEvents(EventBus* eventBus) {}
+	virtual void Update(double deltaTime, EventBus* eventBus) {}
+	virtual void Render(SDL_Renderer* renderer) {}
 };
 
 class System : public ISystem {
@@ -116,7 +118,8 @@ class Registry {
 public:
 	Registry() = default;
 
-	void Update(double deltaTime);
+	void SubscribeToEvents(EventBus* eventBus);
+	void Update(double deltaTime, EventBus* eventBus);
 	void Render(SDL_Renderer* renderer);
 
 	Entity CreateEntity();

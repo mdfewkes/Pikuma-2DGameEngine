@@ -137,6 +137,7 @@ void Game::Setup() {
 	registry.AddSystem<RenderSystem>();
 	registry.AddSystem<AnimationSystem>();
 	registry.AddSystem<CollisionSystem>();
+	registry.AddSystem<DamageSystem>();
 	registry.AddSystem<RenderCollisionSystem>();
 
 	LoadLevel(1);
@@ -152,7 +153,9 @@ void Game::Update() {
 	float deltaTime = (SDL_GetTicks()  - millisecondsPreviousFrame) / 1000.0f;
 	millisecondsPreviousFrame = SDL_GetTicks();
 
-	registry.Update(deltaTime);
+	eventBus.Reset();
+	registry.SubscribeToEvents(&eventBus);
+	registry.Update(deltaTime, &eventBus);
 }
 
 void Game::Render() {

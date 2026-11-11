@@ -4,11 +4,10 @@
 #include <algorithm>
 #include <vector>
 
-#include "SDL2/SDL_rect.h"
-#include "SDL2/SDL_render.h"
-#include "SDL2/SDL_timer.h"
 #include "ecs.h"
 #include "components.hpp"
+#include "eventbus.hpp"
+#include "events.hpp"
 
 class MovementSystem : public System {
 public:
@@ -18,7 +17,7 @@ public:
 	}
 	~MovementSystem() override = default;
 
-	void Update(double deltaTime) override {
+	void Update(double deltaTime, EventBus* eventBus) override {
 		for (auto entity: GetEntities()) {
 			auto& transform = entity.GetComponent<TransformComponent>();
 			const auto rigidbody = entity.GetComponent<RigidbobyComponent>();
@@ -87,7 +86,7 @@ public:
 	}
 	~AnimationSystem() override = default;
 
-	void Update(double deltaTime) override {
+	void Update(double deltaTime, EventBus* eventBus) override {
 		for (auto entity: GetEntities()) {
 			auto& sprite = entity.GetComponent<SpriteComponent>();
 			auto& animation = entity.GetComponent<AnimationComponent>();
@@ -105,7 +104,7 @@ public:
 	}
 	~CollisionSystem() override = default;
 
-	void Update(double deltaTime) override {
+	void Update(double deltaTime, EventBus* eventBus) override {
 		auto entities = GetEntities();
 
 		for (auto entityAItt = entities.begin(); entityAItt != entities.end(); entityAItt++) {
@@ -132,10 +131,7 @@ public:
 				);
 
 				if (collisionHappened) {
-					Logger::Log("bam");
-
-					entityA.Destroy();
-					entityB.Destroy();
+					eventBus->EmitEvent<CollisionEvent>(entityA, entityB);
 				}
 			}
 		}
@@ -176,12 +172,24 @@ public:
 	}
 };
 
-class DamageSystem : System {
+class DamageSystem : public System {
 public:
-	DamageSystem() {}
+	DamageSystem() {
+		RequireComponent<BoxCollideComponent>();
+	}
 	~DamageSystem() override = default;
 
-	void Update(double deltaTime) override {
+	void SubscribeToEvents(EventBus* eventBus) override {
+		eventBus->SubscribeToEvent(this, &DamageSystem::onCollision);
+	}
+	void onCollision(CollisionEvent& event) {
+		Logger::Log("onCollision {");
+		event.a.Destroy();
+		event.b.Destroy();
+		Logger::Log("onCollision }");
+	}
+
+	void Update(double deltaTime, EventBus* eventBus) override {
 
 	}
 };
