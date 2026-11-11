@@ -175,3 +175,13 @@ public:
 		}
 	}
 };
+
+class DamageSystem : System {
+public:
+	DamageSystem() {}
+	~DamageSystem() override = default;
+
+	void Update(double deltaTime) override {
+
+	}
+};
