@@ -17,7 +17,7 @@ public:
 	}
 
 private:
-	virtual void Call(Event e) = 0;
+	virtual void Call(Event& e) = 0;
 
 };
 
@@ -36,7 +36,7 @@ private:
 	TOwner* ownerInstance;
 	CallbackFunction callbackFunction;
 
-	void Call(Event e) override {
+	void Call(Event& e) override {
 		std::invoke(callbackFunction, ownerInstance, static_cast<TEvent&>(e));
 	}
 };

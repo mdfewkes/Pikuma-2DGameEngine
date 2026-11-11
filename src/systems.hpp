@@ -183,10 +183,8 @@ public:
 		eventBus->SubscribeToEvent(this, &DamageSystem::onCollision);
 	}
 	void onCollision(CollisionEvent& event) {
-		Logger::Log("onCollision {");
-		event.a.Destroy();
+	    event.a.Destroy();
 		event.b.Destroy();
-		Logger::Log("onCollision }");
 	}
 
 	void Update(double deltaTime, EventBus* eventBus) override {

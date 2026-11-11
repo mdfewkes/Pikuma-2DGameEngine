@@ -11,9 +11,7 @@ int Entity::GetId() const {
 }
 
 void Entity::Destroy() {
-	Logger::Log("  Destroy {");
 	registry->DestroyEntity(*this);
-	Logger::Log("  Destroy }");
 }
 
 
