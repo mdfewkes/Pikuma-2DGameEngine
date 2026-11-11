@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ecs.h"
-#include "eventbus.h"
+#include "event.hpp"
 
 
 class CollisionEvent : public Event {
