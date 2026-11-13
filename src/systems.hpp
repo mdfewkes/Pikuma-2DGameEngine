@@ -2,6 +2,7 @@
 
 #include <SDL2/SDL.h>
 #include <algorithm>
+#include <string>
 #include <vector>
 
 #include "ecs.h"
@@ -189,5 +190,19 @@ public:
 
 	void Update(double deltaTime, EventBus* eventBus) override {
 
+	}
+};
+
+class KeyboardControlSystem : public System {
+public:
+	KeyboardControlSystem() {}
+
+	void SubscribeToEvents(EventBus* eventBus) override {
+		eventBus->SubscribeToEvent(this, &KeyboardControlSystem::onKeyPressed);
+	}
+
+	void onKeyPressed(KeyPressEvent& event) {
+		std::string keyCode = std::to_string(event.symbol);
+		std::string keySymbol(1, event.symbol);
 	}
 };

@@ -7,6 +7,7 @@
 
 #include "SDL2/SDL_keycode.h"
 #include "ecs.h"
+#include "events.hpp"
 #include "logger.h"
 #include "components.hpp"
 #include "systems.hpp"
@@ -67,6 +68,7 @@ void Game::ProcessInput() {
 			if (sdlEvent.key.keysym.sym == SDLK_ESCAPE) {
 				isRunning = false;
 			}
+			eventBus.EmitEvent<KeyPressEvent>(sdlEvent.key.keysym.sym);
 			break;
 		}
 	}
@@ -139,6 +141,7 @@ void Game::Setup() {
 	registry.AddSystem<CollisionSystem>();
 	registry.AddSystem<DamageSystem>();
 	registry.AddSystem<RenderCollisionSystem>();
+	registry.AddSystem<KeyboardControlSystem>();
 
 	LoadLevel(1);
 }
