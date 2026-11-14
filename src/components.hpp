@@ -71,3 +71,20 @@ struct BoxCollideComponent {
 		this->offset = offset;
 	}
 };
+
+struct KeyboardControlledComponent {
+	glm::vec2 upVelocity, rightVelocity, downVelocity, leftVelocity;
+	
+	KeyboardControlledComponent(glm::vec2 directionVelocity = glm::vec2(0)) {
+		this->upVelocity = glm::vec2(0.0f, directionVelocity.y);
+		this->rightVelocity = glm::vec2(directionVelocity.x, 0.0f);
+		this->downVelocity = glm::vec2(0.0f, -directionVelocity.y);
+		this->leftVelocity = glm::vec2(-directionVelocity.x, 0.0f);
+	}
+	KeyboardControlledComponent(glm::vec2 upVelocity, glm::vec2 rightVelocity, glm::vec2 downVelocity, glm::vec2 leftVelocity) {
+		this->upVelocity = upVelocity;
+		this->rightVelocity = rightVelocity;
+		this->downVelocity = downVelocity;
+		this->leftVelocity = leftVelocity;
+	}
+};

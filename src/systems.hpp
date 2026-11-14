@@ -195,14 +195,40 @@ public:
 
 class KeyboardControlSystem : public System {
 public:
-	KeyboardControlSystem() {}
+	KeyboardControlSystem() {
+		RequireComponent<KeyboardControlledComponent>();
+		RequireComponent<SpriteComponent>();
+		RequireComponent<RigidbobyComponent>();
+	}
 
 	void SubscribeToEvents(EventBus* eventBus) override {
 		eventBus->SubscribeToEvent(this, &KeyboardControlSystem::onKeyPressed);
 	}
 
 	void onKeyPressed(KeyPressEvent& event) {
-		std::string keyCode = std::to_string(event.symbol);
-		std::string keySymbol(1, event.symbol);
+		for (auto entity: GetEntities()) {
+			const auto keyboard = entity.GetComponent<KeyboardControlledComponent>();
+			auto& sprite = entity.GetComponent<SpriteComponent>();
+			auto& rigidbody = entity.GetComponent<RigidbobyComponent>();
+
+			switch (event.symbol) {
+			case SDLK_UP:
+				rigidbody.velocity = keyboard.upVelocity;
+				sprite.srcRect.y = sprite.height * 0;
+				break;
+			case SDLK_RIGHT:
+				rigidbody.velocity = keyboard.rightVelocity;
+				sprite.srcRect.y = sprite.height * 1;
+				break;
+			case SDLK_DOWN:
+				rigidbody.velocity = keyboard.downVelocity;
+				sprite.srcRect.y = sprite.height * 2;
+				break;
+			case SDLK_LEFT:
+				rigidbody.velocity = keyboard.leftVelocity;
+				sprite.srcRect.y = sprite.height * 3;
+				break;
+			}
+		}
 	}
 };

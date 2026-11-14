@@ -76,7 +76,7 @@ void Game::ProcessInput() {
 }
 
 void Game::LoadLevel(int level) {
-	assetStore.AddTexture(renderer, "chopper-image", "./assets/images/chopper.png");
+	assetStore.AddTexture(renderer, "chopper-image", "./assets/images/chopper-spritesheet.png");
 	assetStore.AddTexture(renderer, "tank-image", "./assets/images/tank-tiger-right.png");
 	assetStore.AddTexture(renderer, "truck-image", "./assets/images/truck-ford-right.png");
 	assetStore.AddTexture(renderer, "tilemap-image", "./assets/tilemaps/jungle.png");
@@ -114,6 +114,7 @@ void Game::LoadLevel(int level) {
 	chopper.AddComponent<BoxCollideComponent>();
 	chopper.AddComponent<SpriteComponent>(assetStore.GetTexture("chopper-image"), 1, 32, 32);
 	chopper.AddComponent<AnimationComponent>(2, 15);
+	chopper.AddComponent<KeyboardControlledComponent>(glm::vec2(20.0f, -20.0f));
 
 
 	Entity tank = registry.CreateEntity();
