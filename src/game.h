@@ -18,8 +18,10 @@ public:
 	void Destroy();
 	void Run();
 
-	int windowWidth;
-	int windowHeight;
+	static int windowWidth;
+	static int windowHeight;
+	static int mapWidth;
+	static int mapHeight;
 
 private:
 	bool isRunning = false;
@@ -27,6 +29,7 @@ private:
 	int millisecondsPreviousFrame;
 	SDL_Window* window;
 	SDL_Renderer* renderer;
+	SDL_Rect camera;
 
 	Registry registry;
 	AssetStore assetStore;

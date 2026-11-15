@@ -2,13 +2,13 @@
 
 #include <SDL2/SDL.h>
 #include <algorithm>
-#include <string>
 #include <vector>
 
 #include "ecs.h"
 #include "components.hpp"
 #include "eventbus.hpp"
 #include "events.hpp"
+#include "game.h"
 
 class MovementSystem : public System {
 public:
@@ -27,12 +27,15 @@ public:
 			transform.position.y += rigidbody.velocity.y * deltaTime;
 		}
 	}
-
 };
 
 class RenderSystem : public System {
 public:
-	RenderSystem() {
+	SDL_Rect* camera;
+
+	RenderSystem(SDL_Rect* camera) {
+		this->camera = camera;
+
 		RequireComponent<TransformComponent>();
 		RequireComponent<SpriteComponent>();
 	}
@@ -60,8 +63,8 @@ public:
 			const auto sprite = entity.spriteComponent;
 
 			SDL_Rect dstRect = {
-				static_cast<int>(transform.position.x),
-				static_cast<int>(transform.position.y),
+				static_cast<int>(transform.position.x - camera->x),
+				static_cast<int>(transform.position.y - camera->y),
 				static_cast<int>(sprite.width * transform.scale.x),
 				static_cast<int>(sprite.height * transform.scale.y)
 			};
@@ -229,6 +232,34 @@ public:
 				sprite.srcRect.y = sprite.height * 3;
 				break;
 			}
+		}
+	}
+};
+
+class CameraMovementSystem : public System {
+public:
+	SDL_Rect* camera;
+	int windowWidth;
+	int windowHeight;
+
+	CameraMovementSystem(SDL_Rect* camera) {
+		this->camera = camera;
+
+		RequireComponent<CameraFollowComponent>();
+		RequireComponent<TransformComponent>();
+	}
+
+	void Update(double deltaTime, EventBus* eventBus) override {
+		for (auto entity: GetEntities()) {
+			auto transform = entity.GetComponent<TransformComponent>();
+
+			camera->x = transform.position.x - camera->w/2;
+			camera->y = transform.position.y - camera->h/2;
+
+			if (camera->x < 0) camera->x = 0;
+			if (camera->x > Game::mapWidth - camera->w) camera->x = Game::mapWidth - camera->w;
+			if (camera->y < 0) camera->y = 0;
+			if (camera->y > Game::mapHeight - camera->h) camera->y = Game::mapHeight - camera->h;
 		}
 	}
 };

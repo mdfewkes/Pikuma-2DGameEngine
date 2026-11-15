@@ -12,6 +12,11 @@
 #include "components.hpp"
 #include "systems.hpp"
 
+int Game::windowWidth;
+int Game::windowHeight;
+int Game::mapWidth;
+int Game::mapHeight;
+
 Game::Game() {
 	isRunning = false;
 	Logger::Log("Game constructor called!");
@@ -47,6 +52,11 @@ void Game::Initialize() {
 	if (!renderer) {
 		Logger::Err("Error creating SDL renderer.");
 	}
+
+	camera.x = 0;
+	camera.y = 0;
+	camera.w = windowWidth;
+	camera.h = windowHeight;
 
 	isRunning = true;
 }
@@ -107,6 +117,8 @@ void Game::LoadLevel(int level) {
 		}
 	}
 	mapFile.close();
+	mapWidth = mapNumCols * tileSize * tileScale;
+	mapHeight = mapNumRows * tileSize * tileScale;
 
 	Entity chopper = registry.CreateEntity();
 	chopper.AddComponent<TransformComponent>(glm::vec2(10.0f, 10.0f));
@@ -115,6 +127,7 @@ void Game::LoadLevel(int level) {
 	chopper.AddComponent<SpriteComponent>(assetStore.GetTexture("chopper-image"), 1, 32, 32);
 	chopper.AddComponent<AnimationComponent>(2, 15);
 	chopper.AddComponent<KeyboardControlledComponent>(glm::vec2(80.0f, -80.0f));
+	chopper.AddComponent<CameraFollowComponent>();
 
 
 	Entity tank = registry.CreateEntity();
@@ -137,12 +150,13 @@ void Game::LoadLevel(int level) {
 
 void Game::Setup() {
 	registry.AddSystem<MovementSystem>();
-	registry.AddSystem<RenderSystem>();
+	registry.AddSystem<RenderSystem>(&camera);
 	registry.AddSystem<AnimationSystem>();
 	registry.AddSystem<CollisionSystem>();
 	registry.AddSystem<DamageSystem>();
 	registry.AddSystem<RenderCollisionSystem>();
 	registry.AddSystem<KeyboardControlSystem>();
+	registry.AddSystem<CameraMovementSystem>(&camera);
 
 	LoadLevel(1);
 }

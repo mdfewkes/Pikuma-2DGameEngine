@@ -88,3 +88,7 @@ struct KeyboardControlledComponent {
 		this->leftVelocity = leftVelocity;
 	}
 };
+
+struct CameraFollowComponent {
+	CameraFollowComponent() = default;
+};
