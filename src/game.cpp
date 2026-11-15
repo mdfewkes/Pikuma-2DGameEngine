@@ -114,7 +114,7 @@ void Game::LoadLevel(int level) {
 	chopper.AddComponent<BoxCollideComponent>();
 	chopper.AddComponent<SpriteComponent>(assetStore.GetTexture("chopper-image"), 1, 32, 32);
 	chopper.AddComponent<AnimationComponent>(2, 15);
-	chopper.AddComponent<KeyboardControlledComponent>(glm::vec2(20.0f, -20.0f));
+	chopper.AddComponent<KeyboardControlledComponent>(glm::vec2(80.0f, -80.0f));
 
 
 	Entity tank = registry.CreateEntity();
