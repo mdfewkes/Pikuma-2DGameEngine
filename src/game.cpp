@@ -154,7 +154,7 @@ void Game::Setup() {
 	registry.AddSystem<AnimationSystem>();
 	registry.AddSystem<CollisionSystem>();
 	registry.AddSystem<DamageSystem>();
-	registry.AddSystem<RenderCollisionSystem>();
+	registry.AddSystem<RenderCollisionSystem>(&camera);
 	registry.AddSystem<KeyboardControlSystem>();
 	registry.AddSystem<CameraMovementSystem>(&camera);
 
