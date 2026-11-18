@@ -136,7 +136,7 @@ void Game::LoadLevel(int level) {
 	tank.AddComponent<RigidbobyComponent>(glm::vec2(0.0f, 0.0f));
 	tank.AddComponent<BoxCollideComponent>(32, 32);
 	tank.AddComponent<SpriteComponent>(assetStore.GetTexture("tank-image"));
-	tank.AddComponent<ProjectileEmitterComponent>(glm::vec2(100.0f, 0.0f), 0, 1000, 10, false);
+	tank.AddComponent<ProjectileEmitterComponent>(glm::vec2(100.0f, 0.0f), 1000, 1000, 10, false);
 
 	Entity truck = registry.CreateEntity();
 	truck.AddComponent<TransformComponent>(glm::vec2(70.0f, 50.0f));
@@ -159,7 +159,7 @@ void Game::Setup() {
 	registry.AddSystem<RenderCollisionSystem>(&camera);
 	registry.AddSystem<KeyboardControlSystem>();
 	registry.AddSystem<CameraMovementSystem>(&camera);
-	registry.AddSystem<ProjectileEmitSystem>(&registry, &assetStore);
+	registry.AddSystem<ProjectileEmitterSystem>(&registry, &assetStore);
 
 	LoadLevel(1);
 }

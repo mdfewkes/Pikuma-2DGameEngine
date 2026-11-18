@@ -10,6 +10,7 @@
 #include "eventbus.hpp"
 #include "events.hpp"
 #include "game.h"
+#include "logger.h"
 
 class MovementSystem : public System {
 public:
@@ -269,21 +270,24 @@ public:
 	}
 };
 
-class ProjectileEmitSystem : public System {
+class ProjectileEmitterSystem : public System {
 public:
 	Registry* registry;
 	AssetStore* assetStore;
 
-	ProjectileEmitSystem(Registry* registry, AssetStore* assetStore) {
+	ProjectileEmitterSystem(Registry* registry, AssetStore* assetStore) {
 		this->registry = registry;
 		this->assetStore = assetStore;
 
-		RequireComponent<ProjectileEmitSystem>();
+		RequireComponent<ProjectileEmitterComponent>();
 		RequireComponent<TransformComponent>();
 	}
 
 	void Update(double deltaTime, EventBus* eventBus) override {
+		Logger::Log("ProjectileEmitSystem-Update");
+
 		for (auto entity: GetEntities()) {
+			Logger::Log("ProjectileEmitSystem-Update Entity: " + std::to_string(entity.GetId()));
 			auto& projectileEmitter = entity.GetComponent<ProjectileEmitterComponent>();
 			const auto transform = entity.GetComponent<TransformComponent>();
 
