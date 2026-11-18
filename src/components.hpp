@@ -94,3 +94,21 @@ struct KeyboardControlledComponent {
 struct CameraFollowComponent {
 	CameraFollowComponent() = default;
 };
+
+struct ProjectileEmitterComponent {
+	glm::vec2 velocity;
+	int repeatFrequencyMS;
+	int projectileDurationMS;
+	int hitPercentDamage;
+	bool isFriendly;
+	int lastEmissionTime;
+
+	ProjectileEmitterComponent(glm::vec2 velocity = glm::vec2(0), int repeatFrequencyMS = 0, int projectileDurationMS = 10000, int hitPercentDamage = 10, bool isFriendly = false) {
+		this->velocity = velocity;
+		this->repeatFrequencyMS = repeatFrequencyMS;
+		this->projectileDurationMS = projectileDurationMS;
+		this->hitPercentDamage = hitPercentDamage;
+		this->isFriendly = isFriendly;
+		this->lastEmissionTime = SDL_GetTicks();
+	}
+};

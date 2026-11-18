@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <vector>
 
+#include "SDL2/SDL_timer.h"
 #include "ecs.h"
 #include "components.hpp"
 #include "eventbus.hpp"
@@ -191,8 +192,8 @@ public:
 		eventBus->SubscribeToEvent(this, &DamageSystem::onCollision);
 	}
 	void onCollision(CollisionEvent& event) {
-	    event.a.Destroy();
-		event.b.Destroy();
+	    // event.a.Destroy();
+		// event.b.Destroy();
 	}
 
 	void Update(double deltaTime, EventBus* eventBus) override {
@@ -264,6 +265,44 @@ public:
 			if (camera->x > Game::mapWidth - camera->w) camera->x = Game::mapWidth - camera->w;
 			if (camera->y < 0) camera->y = 0;
 			if (camera->y > Game::mapHeight - camera->h) camera->y = Game::mapHeight - camera->h;
+		}
+	}
+};
+
+class ProjectileEmitSystem : public System {
+public:
+	Registry* registry;
+	AssetStore* assetStore;
+
+	ProjectileEmitSystem(Registry* registry, AssetStore* assetStore) {
+		this->registry = registry;
+		this->assetStore = assetStore;
+
+		RequireComponent<ProjectileEmitSystem>();
+		RequireComponent<TransformComponent>();
+	}
+
+	void Update(double deltaTime, EventBus* eventBus) override {
+		for (auto entity: GetEntities()) {
+			auto& projectileEmitter = entity.GetComponent<ProjectileEmitterComponent>();
+			const auto transform = entity.GetComponent<TransformComponent>();
+
+			if (SDL_GetTicks() - projectileEmitter.lastEmissionTime > projectileEmitter.repeatFrequencyMS) {
+				glm::vec2 projectilePosition = transform.position;
+				if (entity.HasComponent<SpriteComponent>()) {
+					const auto sprite = entity.GetComponent<SpriteComponent>();
+					projectilePosition.x += (transform.scale.x * sprite.width/2.0f);
+					projectilePosition.y += (transform.scale.y * sprite.height/2.0f);
+				}
+
+				Entity projectile = registry->CreateEntity();
+				projectile.AddComponent<TransformComponent>(projectilePosition);
+				projectile.AddComponent<RigidbobyComponent>(projectileEmitter.velocity);
+				projectile.AddComponent<BoxCollideComponent>(4, 4);
+				projectile.AddComponent<SpriteComponent>(assetStore->GetTexture("bullet-image"), 4, 4, 4);
+
+				projectileEmitter.lastEmissionTime = SDL_GetTicks();
+			}
 		}
 	}
 };

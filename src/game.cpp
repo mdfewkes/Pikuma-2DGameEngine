@@ -91,6 +91,7 @@ void Game::LoadLevel(int level) {
 	assetStore.AddTexture(renderer, "truck-image", "./assets/images/truck-ford-right.png");
 	assetStore.AddTexture(renderer, "tilemap-image", "./assets/tilemaps/jungle.png");
 	assetStore.AddTexture(renderer, "radar-image", "./assets/images/radar.png");
+	assetStore.AddTexture(renderer, "bullet-image", "./assets/images/bullet.png");
 
 	int tileSize = 32;
 	double tileScale = 2.0;
@@ -132,9 +133,10 @@ void Game::LoadLevel(int level) {
 
 	Entity tank = registry.CreateEntity();
 	tank.AddComponent<TransformComponent>(glm::vec2(10.0f, 30.0f));
-	tank.AddComponent<RigidbobyComponent>(glm::vec2(40.0f, 10.0f));
+	tank.AddComponent<RigidbobyComponent>(glm::vec2(0.0f, 0.0f));
 	tank.AddComponent<BoxCollideComponent>(32, 32);
 	tank.AddComponent<SpriteComponent>(assetStore.GetTexture("tank-image"));
+	tank.AddComponent<ProjectileEmitterComponent>(glm::vec2(100.0f, 0.0f), 0, 1000, 10, false);
 
 	Entity truck = registry.CreateEntity();
 	truck.AddComponent<TransformComponent>(glm::vec2(70.0f, 50.0f));
@@ -157,6 +159,7 @@ void Game::Setup() {
 	registry.AddSystem<RenderCollisionSystem>(&camera);
 	registry.AddSystem<KeyboardControlSystem>();
 	registry.AddSystem<CameraMovementSystem>(&camera);
+	registry.AddSystem<ProjectileEmitSystem>(&registry, &assetStore);
 
 	LoadLevel(1);
 }
