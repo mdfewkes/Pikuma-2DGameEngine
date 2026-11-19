@@ -112,3 +112,11 @@ struct ProjectileEmitterComponent {
 		this->lastEmissionTime = SDL_GetTicks();
 	}
 };
+
+struct HealthComponent {
+	int healthPercentage;
+
+	HealthComponent(int health = 100) {
+		this->healthPercentage = health;
+	}
+};

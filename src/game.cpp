@@ -128,6 +128,7 @@ void Game::LoadLevel(int level) {
 	chopper.AddComponent<SpriteComponent>(assetStore.GetTexture("chopper-image"), 1, 32, 32);
 	chopper.AddComponent<AnimationComponent>(2, 15);
 	chopper.AddComponent<KeyboardControlledComponent>(glm::vec2(80.0f, -80.0f));
+	chopper.AddComponent<HealthComponent>();
 	chopper.AddComponent<CameraFollowComponent>();
 
 
@@ -137,11 +138,13 @@ void Game::LoadLevel(int level) {
 	tank.AddComponent<BoxCollideComponent>(32, 32);
 	tank.AddComponent<SpriteComponent>(assetStore.GetTexture("tank-image"));
 	tank.AddComponent<ProjectileEmitterComponent>(glm::vec2(100.0f, 0.0f), 1000, 1000, 10, false);
+	tank.AddComponent<HealthComponent>();
 
 	Entity truck = registry.CreateEntity();
 	truck.AddComponent<TransformComponent>(glm::vec2(70.0f, 50.0f));
 	truck.AddComponent<BoxCollideComponent>(32, 32);
 	truck.AddComponent<SpriteComponent>(assetStore.GetTexture("truck-image"));
+	truck.AddComponent<HealthComponent>();
 
 	Entity radar = registry.CreateEntity();
 	radar.AddComponent<TransformComponent>(glm::vec2(windowWidth - 14, 10.0f));
