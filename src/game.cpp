@@ -129,6 +129,7 @@ void Game::LoadLevel(int level) {
 	chopper.AddComponent<KeyboardControlledComponent>(glm::vec2(80.0f, -80.0f));
 	chopper.AddComponent<HealthComponent>();
 	chopper.AddComponent<CameraFollowComponent>();
+	chopper.AddComponent<ProjectileEmitterComponent>(glm::vec2(120.0f, 120.0f), 0, 2000, 0, true);
 
 
 	Entity tank = registry.CreateEntity();

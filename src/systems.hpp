@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <vector>
 
+#include "SDL2/SDL_keycode.h"
 #include "SDL2/SDL_timer.h"
 #include "ecs.h"
 #include "components.hpp"
@@ -283,13 +284,54 @@ public:
 		RequireComponent<TransformComponent>();
 	}
 
-	void Update(double deltaTime, EventBus* eventBus) override {
-		Logger::Log("ProjectileEmitSystem-Update");
+	void SubscribeToEvents(EventBus* eventBus) override {
+		eventBus->SubscribeToEvent(this, &ProjectileEmitterSystem::onKeyPressed);
+	}
 
+	void onKeyPressed(KeyPressEvent& event) {
+		if (event.symbol == SDLK_SPACE) {
+			for (auto entity: GetEntities()) {
+				if (entity.HasComponent<CameraFollowComponent>()) {
+					const auto projectileEmitter = entity.GetComponent<ProjectileEmitterComponent>();
+					const auto transform = entity.GetComponent<TransformComponent>();
+					const auto rigidbody = entity.GetComponent<RigidbobyComponent>();
+
+					glm::vec2 projectilePosition = transform.position;
+					if (entity.HasComponent<SpriteComponent>()) {
+						const auto sprite = entity.GetComponent<SpriteComponent>();
+						projectilePosition.x += (transform.scale.x * sprite.width/2.0f);
+						projectilePosition.y += (transform.scale.y * sprite.height/2.0f);
+					}
+
+					glm::vec2 projectileVelocity = projectileEmitter.velocity;
+					int directionX = 0;
+					int directionY = 0;
+					if (rigidbody.velocity.x > 0) directionX = +1;
+					if (rigidbody.velocity.x < 0) directionX = -1;
+					if (rigidbody.velocity.y > 0) directionY = +1;
+					if (rigidbody.velocity.y < 0) directionY = -1;
+					projectileVelocity.x *= directionX;
+					projectileVelocity.y *= directionY;
+
+					Entity projectile = registry->CreateEntity();
+					projectile.AddComponent<ProjectileComponent>(projectileEmitter.hitPercentDamage, projectileEmitter.isFriendly, projectileEmitter.projectileDurationMS);
+					projectile.AddComponent<TransformComponent>(projectilePosition);
+					projectile.AddComponent<RigidbobyComponent>(projectileVelocity);
+					projectile.AddComponent<BoxCollideComponent>(4, 4);
+					projectile.AddComponent<SpriteComponent>(assetStore->GetTexture("bullet-image"), 4, 4, 4);
+				}
+			}
+		}
+	}
+
+	void Update(double deltaTime, EventBus* eventBus) override {
 		for (auto entity: GetEntities()) {
-			Logger::Log("ProjectileEmitSystem-Update Entity: " + std::to_string(entity.GetId()));
 			auto& projectileEmitter = entity.GetComponent<ProjectileEmitterComponent>();
 			const auto transform = entity.GetComponent<TransformComponent>();
+
+			if (projectileEmitter.repeatFrequencyMS == 0) {
+				continue;
+			}
 
 			if (SDL_GetTicks() - projectileEmitter.lastEmissionTime > projectileEmitter.repeatFrequencyMS) {
 				glm::vec2 projectilePosition = transform.position;
