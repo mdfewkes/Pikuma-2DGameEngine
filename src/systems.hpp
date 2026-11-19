@@ -300,12 +300,30 @@ public:
 				}
 
 				Entity projectile = registry->CreateEntity();
+				projectile.AddComponent<ProjectileComponent>(projectileEmitter.hitPercentDamage, projectileEmitter.isFriendly, projectileEmitter.projectileDurationMS);
 				projectile.AddComponent<TransformComponent>(projectilePosition);
 				projectile.AddComponent<RigidbobyComponent>(projectileEmitter.velocity);
 				projectile.AddComponent<BoxCollideComponent>(4, 4);
 				projectile.AddComponent<SpriteComponent>(assetStore->GetTexture("bullet-image"), 4, 4, 4);
 
 				projectileEmitter.lastEmissionTime = SDL_GetTicks();
+			}
+		}
+	}
+};
+
+class ProjectileLifecycleSystem : public System {
+public:
+	ProjectileLifecycleSystem() {
+		RequireComponent<ProjectileComponent>();
+	}
+
+	void Update(double deltaTime, EventBus* eventBus) override {
+		for (auto entity: GetEntities()) {
+			auto projectile = entity.GetComponent<ProjectileComponent>();
+
+			if (SDL_GetTicks() - projectile.startTime > projectile.duration) {
+				entity.Destroy();
 			}
 		}
 	}

@@ -113,6 +113,21 @@ struct ProjectileEmitterComponent {
 	}
 };
 
+struct ProjectileComponent {
+	bool isFriendly;
+	int hitPercentDamage;
+	int duration;
+	int startTime;
+
+	ProjectileComponent(int hitPercentDamage = 0, bool isFriendly = false, int duration = 0) {
+		this->isFriendly = isFriendly;
+		this->hitPercentDamage = hitPercentDamage;
+		this->duration = duration;
+
+		this->startTime = SDL_GetTicks();
+	}
+};
+
 struct HealthComponent {
 	int healthPercentage;
 

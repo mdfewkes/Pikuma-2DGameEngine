@@ -82,7 +82,6 @@ void Game::ProcessInput() {
 			break;
 		}
 	}
-
 }
 
 void Game::LoadLevel(int level) {
@@ -150,7 +149,6 @@ void Game::LoadLevel(int level) {
 	radar.AddComponent<TransformComponent>(glm::vec2(windowWidth - 14, 10.0f));
 	radar.AddComponent<SpriteComponent>(assetStore.GetTexture("radar-image"), 2, 64, 64, 0, 0, true);
 	radar.AddComponent<AnimationComponent>(8, 5);
-
 }
 
 void Game::Setup() {
@@ -163,6 +161,7 @@ void Game::Setup() {
 	registry.AddSystem<KeyboardControlSystem>();
 	registry.AddSystem<CameraMovementSystem>(&camera);
 	registry.AddSystem<ProjectileEmitterSystem>(&registry, &assetStore);
+	registry.AddSystem<ProjectileLifecycleSystem>();
 
 	LoadLevel(1);
 }
